@@ -29,9 +29,10 @@
   --safe-top:env(safe-area-inset-top,0px);
   --safe-bot:env(safe-area-inset-bottom,0px);
 }
-html,body{height:100%;overflow:hidden;background:#0E3D63}
+html{height:100%}body{height:100%;overflow:hidden;background:#0E3D63;position:fixed;inset:0;top:0;left:0;right:0;bottom:0;width:100%}@supports(height:100dvh){body{height:100dvh}}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:16px;-webkit-font-smoothing:antialiased;color:var(--text)}
-.shell{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;display:flex;flex-direction:column;background:var(--bg);max-width:430px;margin:0 auto;overflow:hidden;box-shadow:0 0 80px rgba(0,0,0,.45)}
+.shell{height:100%;width:100%;display:flex;flex-direction:column;background:var(--bg);max-width:430px;margin:0 auto;overflow:hidden;box-shadow:0 0 80px rgba(0,0,0,.45)}
+#sc-login,#sc-client,#sc-handyman,#sc-admin{min-height:0}
 .hidden{display:none!important}
 .serif{font-family:'Playfair Display',serif}
 .eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep)}
@@ -43,7 +44,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:1
 .logo-name{font-family:'Playfair Display',serif;color:#fff;font-size:15.5px;font-weight:500;line-height:1.1}
 .logo-sub{color:var(--gold);font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;margin-top:2px}
 .ubtn{background:rgba(255,255,255,.12);color:#fff;font-size:12px;padding:6px 13px;border-radius:20px;border:1px solid rgba(195,166,132,.4);cursor:pointer;white-space:nowrap;min-height:36px;font-family:'Inter',sans-serif}
-.scroll-area{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.scroll-area{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}
 .pg{padding:16px 16px calc(20px + var(--safe-bot))}
 
 /* Band header used at top of client sections */
