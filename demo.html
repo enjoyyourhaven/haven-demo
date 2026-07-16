@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Haven's Honey Do's</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  /* Haven Property Services brand — pulled from logo */
+  --blue:#135182;          /* brand blue */
+  --blue-deep:#0E3D63;     /* darker shade */
+  --blue-tint:#EAF1F8;     /* pale blue wash */
+  --gold:#C3A684;          /* brand champagne gold */
+  --gold-deep:#9A7B4F;     /* readable gold on light */
+  --gold-tint:#F4EDE2;     /* pale gold wash */
+  --bg:#F8F6F2;            /* warm paper */
+  --white:#FFFFFF;
+  --border:#E7E0D4;
+  --text:#22303E;
+  --sub:#75808C;
+  --faint:#A5ADB6;
+  --red:#B23A32;--red-bg:#FBEDEB;
+  --green:#2E7D5B;--green-bg:#E7F3EC;
+  --amber:#8A6D1F;--amber-bg:#F7EFD9;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bot:env(safe-area-inset-bottom,0px);
+}
+html,body{height:100%;overflow:hidden;background:#0E3D63}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:16px;-webkit-font-smoothing:antialiased;color:var(--text)}
+.shell{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--bg);max-width:430px;margin:0 auto;overflow:hidden;box-shadow:0 0 80px rgba(0,0,0,.45)}
+.hidden{display:none!important}
+.serif{font-family:'Playfair Display',serif}
+.eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep)}
+
+/* ─── SHARED CHROME ─── */
+.topbar{flex-shrink:0;background:var(--blue);padding:calc(12px + var(--safe-top)) 18px 12px;display:flex;align-items:center;justify-content:space-between;z-index:50}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:38px;height:38px;flex-shrink:0}
+.logo-name{font-family:'Playfair Display',serif;color:#fff;font-size:15.5px;font-weight:500;line-height:1.1}
+.logo-sub{color:var(--gold);font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;margin-top:2px}
+.ubtn{background:rgba(255,255,255,.12);color:#fff;font-size:12px;padding:6px 13px;border-radius:20px;border:1px solid rgba(195,166,132,.4);cursor:pointer;white-space:nowrap;min-height:36px;font-family:'Inter',sans-serif}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.pg{padding:16px 16px calc(20px + var(--safe-bot))}
+
+/* Band header used at top of client sections */
+.band{background:var(--blue);padding:20px 20px 24px;position:relative;overflow:hidden}
+.band::before{content:'';position:absolute;right:-24px;bottom:-52px;width:170px;height:170px;border-radius:50%;background:rgba(195,166,132,.10)}
+.band::after{content:'';position:absolute;right:52px;bottom:-78px;width:104px;height:104px;border-radius:50%;background:rgba(195,166,132,.07)}
+.band .eyebrow{color:var(--gold);margin-bottom:5px}
+.band-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:500;color:#fff;margin-bottom:4px;position:relative;z-index:1}
+.band-sub{font-size:13px;color:rgba(255,255,255,.6);position:relative;z-index:1}
+
+/* Cards */
+.card{background:var(--white);border:0.5px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ct{font-family:'Playfair Display',serif;font-size:17px;font-weight:500;color:var(--text)}
+.sec{font-size:10px;font-weight:600;color:var(--gold-deep);text-transform:uppercase;letter-spacing:.14em;margin:4px 2px 10px}
+
+/* Badges */
+.bx{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:600;white-space:nowrap}
+.bp{background:var(--amber-bg);color:var(--amber)}
+.bi{background:var(--blue-tint);color:var(--blue)}
+.bd{background:var(--green-bg);color:var(--green)}
+.br{background:var(--gold-tint);color:var(--gold-deep)}
+.bu{background:var(--red-bg);color:var(--red)}
+
+/* Rows */
+.tr{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #F1EDE6;min-height:52px}
+.tr:last-child{border-bottom:none;padding-bottom:0}
+.ti{width:38px;height:38px;border-radius:11px;background:var(--gold-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
+.tn{font-size:14px;font-weight:500;color:var(--text)}
+.tm{font-size:12px;color:var(--sub);margin-top:2px}
+.cr{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #F1EDE6;min-height:52px}
+.cr:last-child{border-bottom:none}
+.av{width:38px;height:38px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:13px;font-weight:500;color:#fff;flex-shrink:0}
+
+/* Buttons */
+.bp1{background:var(--blue);color:#fff;border:none;padding:14px 18px;border-radius:12px;font-size:15px;cursor:pointer;font-weight:500;width:100%;margin-top:8px;min-height:50px;display:block;font-family:'Inter',sans-serif}
+.bp1:active{background:var(--blue-deep)}
+.bp1.red{background:var(--red)}
+.bp1.gold{background:var(--gold-deep)}
+.bo{background:transparent;border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:10px;font-size:13px;cursor:pointer;font-weight:500;min-height:36px;font-family:'Inter',sans-serif}
+.bo:active{background:var(--gold-tint)}
+.bs{background:#FBF9F6;border:1px solid var(--border);color:var(--text);padding:13px 16px;border-radius:12px;font-size:14px;cursor:pointer;width:100%;margin-top:8px;font-weight:500;min-height:48px;display:block;text-align:center;font-family:'Inter',sans-serif}
+
+/* Forms */
+.ig{margin-bottom:12px}
+.ig label{font-size:13px;color:var(--sub);display:block;margin-bottom:5px;font-weight:500}
+.ig input,.ig textarea,.ig select{width:100%;font-size:15px;border:1px solid var(--border);border-radius:10px;padding:12px 13px;background:#fff;color:var(--text);outline:none;-webkit-appearance:none;min-height:48px;font-family:'Inter',sans-serif}
+.ig input:focus,.ig textarea:focus,.ig select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(195,166,132,.18)}
+.ig textarea{height:80px;resize:none;min-height:80px}
+
+/* Mic */
+.mb{width:52px;height:52px;border-radius:50%;background:var(--blue);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px}
+.mb.on{background:var(--red);animation:pu 1s infinite}
+@keyframes pu{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.aib{display:inline-flex;align-items:center;gap:5px;font-size:12px;background:var(--gold-tint);color:var(--gold-deep);padding:4px 11px;border-radius:20px;margin-bottom:8px;font-weight:500}
+
+/* Slot grid */
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.sl{border:1.5px solid var(--border);border-radius:10px;padding:10px 6px;text-align:center;cursor:pointer;font-size:13px;color:var(--sub);min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.3;background:#fff}
+.sl.on{border-color:var(--gold-deep);background:var(--gold-tint);color:var(--gold-deep);font-weight:600}
+.sl.ug{border-color:var(--red);background:var(--red-bg);color:var(--red);font-weight:600}
+.sl.fl{opacity:.35;pointer-events:none;text-decoration:line-through}
+
+/* Stats */
+.sr{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.st{background:#fff;border:0.5px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center}
+.sn{font-family:'Playfair Display',serif;font-size:25px;font-weight:500;color:var(--blue)}
+.sl2{font-size:11px;color:var(--sub);margin-top:3px;line-height:1.3}
+
+/* Upload zones, raw/clean, service items */
+.ub{border:1.5px dashed var(--gold);border-radius:12px;padding:20px;text-align:center;color:var(--gold-deep);font-size:14px;cursor:pointer;margin-top:10px;min-height:72px;display:flex;align-items:center;justify-content:center;gap:8px;background:#FDFBF8}
+.raw{background:#FBF9F6;border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;color:var(--sub);line-height:1.7;margin-bottom:8px}
+.cln{background:var(--green-bg);border:1px solid #CBE5D6;border-radius:10px;padding:12px;font-size:13px;color:var(--green);line-height:1.7;margin-bottom:8px}
+.si{display:flex;align-items:center;gap:12px;padding:13px;background:#fff;border:0.5px solid var(--border);border-radius:12px;margin-bottom:8px;cursor:pointer;min-height:60px}
+.si:active{background:var(--gold-tint);border-color:var(--gold)}
+.id{background:var(--blue-tint);border-radius:10px;padding:14px;line-height:1.8;margin-top:8px}
+.vt{background:var(--blue);border-radius:12px;padding:20px;text-align:center;margin-top:10px;cursor:pointer}
+
+/* Hero (My Home) */
+.hero{background:linear-gradient(150deg,var(--blue) 0%,var(--blue-deep) 100%);border-radius:16px;padding:18px;margin-bottom:12px;color:#fff;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-30px;top:-40px;width:140px;height:140px;border-radius:50%;background:rgba(195,166,132,.12)}
+.hero-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px;position:relative;z-index:1}
+.hero-box{text-align:center;background:rgba(255,255,255,.1);border-radius:10px;padding:10px 4px}
+.hero-num{font-family:'Playfair Display',serif;font-size:16px;font-weight:500;color:var(--gold)}
+.hero-lbl{font-size:10px;color:rgba(255,255,255,.6);margin-top:2px}
+.pg3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.ph{border-radius:10px;overflow:hidden;background:#F3EFE8;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border:1.5px dashed var(--border);font-size:24px;cursor:pointer;min-height:90px}
+.ph.filled{border:none}
+.fc{display:inline-flex;align-items:center;gap:5px;font-size:13px;padding:6px 12px;border-radius:20px;background:var(--gold-tint);color:var(--gold-deep);font-weight:500;margin:3px}
+.supr{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #F1EDE6;min-height:56px}
+.supr:last-child{border-bottom:none}
+.supi{width:36px;height:36px;border-radius:10px;background:var(--blue-tint);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.supt{font-size:13px;font-weight:600;color:var(--text)}
+.supm{font-size:12px;color:var(--sub);margin-top:2px}
+.sups{font-size:11px;background:var(--gold-tint);color:var(--gold-deep);padding:4px 9px;border-radius:20px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.kir{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #F1EDE6}
+.kir:last-child{border-bottom:none}
+
+/* How it works */
+.step-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px}
+.step-row:last-child{margin-bottom:0}
+.bubble{width:38px;height:38px;border-radius:50%;background:var(--blue);color:var(--gold);font-family:'Playfair Display',serif;font-size:17px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.check-r{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid #F1EDE6}
+.check-r:last-child{border-bottom:none}
+.check-dot{width:24px;height:24px;border-radius:50%;background:var(--green-bg);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:1px}
+.plan-card{border:0.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;background:#fff}
+.plan-card.feat{border:1.5px solid var(--gold);background:var(--gold-tint)}
+.chip{font-size:12px;background:#F3EFE8;color:#4A5460;padding:4px 10px;border-radius:20px;display:inline-block;margin:3px}
+.chip.hl{background:var(--blue);color:#fff}
+
+/* Pre-visit banner */
+.pv-banner{background:linear-gradient(150deg,var(--blue),var(--blue-deep));border-radius:16px;padding:16px;margin-bottom:12px;color:#fff;position:relative;overflow:hidden}
+.pv-banner::after{content:'';position:absolute;right:-26px;bottom:-46px;width:130px;height:130px;border-radius:50%;background:rgba(195,166,132,.12)}
+.pv-chip{font-size:12px;padding:5px 11px;border-radius:20px;background:rgba(255,255,255,.16);color:#fff;display:inline-block;margin:3px}
+.pv-btn{border:none;font-size:13px;padding:11px 14px;border-radius:10px;cursor:pointer;flex:1;min-height:44px;font-weight:600;font-family:'Inter',sans-serif}
+.pv-btn.solid{background:var(--gold);color:var(--blue-deep)}
+.pv-btn.ghost{background:rgba(255,255,255,.14);color:#fff}
+
+/* Urgent */
+.urg-banner{background:var(--red-bg);border-radius:14px;padding:15px;margin-bottom:14px;border:1px solid #EDCFCB}
+
+/* Dreams */
+.dream-card{background:#fff;border:0.5px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;position:relative}
+.dream-img{width:100%;height:130px;border-radius:12px;background:linear-gradient(135deg,var(--gold-tint),#EDE2CF);display:flex;align-items:center;justify-content:center;font-size:46px;margin-bottom:12px}
+.dream-badge{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:600;display:inline-block;margin-bottom:8px}
+.dream-badge.someday{background:var(--gold-tint);color:var(--gold-deep)}
+.dream-badge.planning{background:var(--amber-bg);color:var(--amber)}
+.dream-badge.ready{background:var(--green-bg);color:var(--green)}
+.budget-row{display:flex;gap:8px;margin-top:10px}
+.budget-chip{flex:1;text-align:center;padding:8px 4px;border:1.5px solid var(--border);border-radius:10px;font-size:12px;cursor:pointer;color:var(--sub);background:#fff}
+.budget-chip.on{border-color:var(--gold-deep);background:var(--gold-tint);color:var(--gold-deep);font-weight:600}
+.add-drm{margin:2px 0 14px;background:var(--gold-tint);border:1.5px dashed var(--gold);border-radius:14px;padding:20px;text-align:center;cursor:pointer}
+
+/* Community */
+.grandpa{background:var(--gold-tint);border-radius:16px;border:0.5px solid var(--border);padding:18px;display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+.gp-icon{width:48px;height:48px;min-width:48px;border-radius:12px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px}
+.story{background:#fff;border:0.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:9px}
+.story-q{font-family:'Playfair Display',serif;font-style:italic;font-size:14px;color:var(--text);line-height:1.75;margin-bottom:12px}
+.stars{color:var(--gold-deep);font-size:11px;margin-top:1px}
+
+/* Referral */
+.referral-card{background:var(--blue);border-radius:16px;padding:20px;margin-bottom:10px;position:relative;overflow:hidden}
+.referral-card::after{content:'';position:absolute;right:-24px;bottom:-46px;width:120px;height:120px;border-radius:50%;background:rgba(195,166,132,.13)}
+.ref-code-box{background:rgba(255,255,255,.1);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;position:relative;z-index:1}
+.ref-code{font-size:17px;font-weight:600;color:var(--gold);letter-spacing:.08em}
+.copy-btn{background:var(--gold);color:var(--blue-deep);border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.qb{width:90px;height:90px;background:#F3EFE8;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* Bottom nav (client) */
+.nav{flex-shrink:0;background:var(--white);border-top:0.5px solid var(--border);padding:8px 0 calc(8px + var(--safe-bot));display:flex;z-index:60}
+.nav-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:5px 2px;border:none;background:none;font-family:'Inter',sans-serif}
+.nav-tab svg{width:22px;height:22px;stroke:var(--faint);fill:none;stroke-width:1.6;transition:stroke .2s}
+.nav-lbl{font-size:10px;font-weight:500;color:var(--faint);transition:color .2s}
+.nav-tab.on svg{stroke:var(--gold-deep)}
+.nav-tab.on .nav-lbl{color:var(--gold-deep);font-weight:600}
+
+/* More menu */
+.more-item{display:flex;align-items:center;gap:13px;padding:15px 16px;background:#fff;border:0.5px solid var(--border);border-radius:14px;margin-bottom:9px;cursor:pointer;min-height:60px}
+.more-item:active{background:var(--gold-tint)}
+.more-ic{width:40px;height:40px;border-radius:11px;background:var(--gold-tint);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.more-t{font-size:14px;font-weight:600;color:var(--text)}
+.more-s{font-size:12px;color:var(--sub);margin-top:2px}
+.more-arr{margin-left:auto;color:var(--faint);font-size:16px}
+
+/* Staff tabs (handyman + admin) */
+.atabs{flex-shrink:0;display:flex;background:var(--blue);overflow-x:auto;-webkit-overflow-scrolling:touch;padding:0 4px}
+.atabs::-webkit-scrollbar{display:none}
+.at{padding:12px 14px;font-size:13px;color:rgba(255,255,255,.55);border-bottom:2px solid transparent;white-space:nowrap;cursor:pointer;user-select:none;flex-shrink:0;min-height:44px;display:flex;align-items:center;font-family:'Inter',sans-serif}
+.at.on{color:#fff;border-bottom-color:var(--gold);font-weight:600}
+
+/* Back bar */
+.backbar{flex-shrink:0;background:#fff;border-bottom:0.5px solid var(--border);padding:8px 12px;display:none;align-items:center}
+.backbar button{background:none;border:none;color:var(--blue);font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:5px;min-height:34px;padding:4px 8px}
+
+/* Login */
+.login-hero{background:var(--blue);padding:calc(36px + var(--safe-top)) 20px 30px;text-align:center;position:relative;overflow:hidden}
+.login-hero::before{content:'';position:absolute;left:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(195,166,132,.07)}
+.login-hero::after{content:'';position:absolute;right:-50px;bottom:-70px;width:220px;height:220px;border-radius:50%;background:rgba(195,166,132,.08)}
+.login-title{font-family:'Playfair Display',serif;color:#fff;font-size:34px;font-weight:500;margin:14px 0 2px;position:relative;z-index:1}
+.login-brandline{color:var(--gold);font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:500;position:relative;z-index:1}
+.login-tag{color:rgba(255,255,255,.55);font-size:13px;margin-top:12px;font-style:italic;font-family:'Playfair Display',serif;position:relative;z-index:1}
+.demo-box{background:var(--gold-tint);border:0.5px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--gold-deep);line-height:1.8}
+.err-box{font-size:13px;color:var(--red);padding:10px 12px;background:var(--red-bg);border-radius:10px;margin-bottom:10px}
+/* Back buttons */
+.band-back{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);border:1px solid rgba(195,166,132,.45);color:#fff;font-size:12px;font-weight:500;padding:7px 14px;border-radius:20px;cursor:pointer;margin-bottom:12px;position:relative;z-index:1;font-family:'Inter',sans-serif;min-height:34px}
+.back-lite{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--border);color:var(--text);font-size:12px;font-weight:500;padding:7px 14px;border-radius:20px;cursor:pointer;margin-bottom:12px;font-family:'Inter',sans-serif;min-height:34px}
+</style>
+</head>
+<body>
+<div class="shell" id="shell">
+
+<!-- ══════════ LOGIN ══════════ -->
+<div id="sc-login" style="display:flex;flex-direction:column;flex:1;background:var(--blue)">
+  <div class="login-hero">
+    <svg width="96" height="96" viewBox="0 0 100 100" fill="none" stroke="#C3A684" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:relative;z-index:1">
+      <!-- Arched window frame -->
+      <path d="M22 88 V46 A28 30 0 0 1 78 46 V88 Z"/>
+      <!-- Arch mullions -->
+      <path d="M22 46 H78"/>
+      <path d="M50 16 V30"/>
+      <path d="M31 22 L38 34"/>
+      <path d="M69 22 L62 34"/>
+      <!-- House inside -->
+      <path d="M34 88 V50 L50 38 L66 50 V88"/>
+      <!-- Door -->
+      <path d="M50 62 V74"/>
+      <!-- Ground line -->
+      <path d="M34 76 H66"/>
+      <!-- Pine trees -->
+      <path d="M28 82 V58 M24 64 L28 59 L32 64 M24 70 L28 65 L32 70 M24 76 L28 71 L32 76"/>
+      <path d="M72 82 V58 M68 64 L72 59 L76 64 M68 70 L72 65 L76 70 M68 76 L72 71 L76 76"/>
+    </svg>
+    <div class="login-title" style="font-size:29px">Haven&#8217;s Honey Do&#8217;s</div>
+    <div class="login-brandline">By Haven Property Services</div>
+    <div class="login-tag">Property maintenance, simplified.</div>
+  </div>
+  <div style="background:var(--bg);border-radius:26px 26px 0 0;flex:1;padding:26px 20px calc(26px + var(--safe-bot));overflow-y:auto;margin-top:-14px;position:relative;z-index:2">
+    <div class="demo-box">
+      <div style="font-weight:700;margin-bottom:6px;font-size:13px;letter-spacing:.04em">SIGN IN</div>
+      Use your Haven account email &amp; password.<br>
+      <div style="margin-top:6px;font-size:12px;opacity:.8">Demo mode: client@havens.app / client123 · marcus@havens.app / handyman123 · admin@havens.app / admin123</div>
+    </div>
+    <div class="ig"><label>Email address</label><input type="email" id="le" placeholder="your@email.com" autocapitalize="none" autocorrect="off"/></div>
+    <div class="ig"><label>Password</label><input type="password" id="lp" placeholder="••••••••"/></div>
+    <div id="lerr" class="err-box hidden">Incorrect email or password. Try again.</div>
+    <button class="bp1" style="margin-top:4px;font-size:16px" onclick="doLogin()">Sign in</button>
+    <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--sub)">Forgot password? <span style="color:var(--gold-deep);font-weight:600">Reset it</span></div>
+  </div>
+</div>
+
+<!-- ══════════ CLIENT ══════════ -->
+<div id="sc-client" class="hidden" style="display:flex;flex-direction:column;flex:1">
+  <div class="topbar">
+    <div class="logo">
+      <svg class="logo-mark" viewBox="0 0 100 100" fill="none" stroke="#C3A684" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 88 V46 A28 30 0 0 1 78 46 V88 Z"/><path d="M22 46 H78"/><path d="M50 16 V30"/><path d="M31 22 L38 34"/><path d="M69 22 L62 34"/><path d="M34 88 V50 L50 38 L66 50 V88"/><path d="M50 62 V74"/><path d="M34 76 H66"/>
+      </svg>
+      <div><div class="logo-name">Haven&#8217;s Honey Do&#8217;s</div><div class="logo-sub">Property Services</div></div>
+    </div>
+    
+  </div>
+  <div class="backbar" id="c-back"><button onclick="cback()">‹ Back</button></div>
+  <div class="scroll-area" id="c-scroll">
+
+    <!-- ── HOME ── -->
+    <div id="c-home" class="cpanel">
+      <div class="band">
+        <div class="eyebrow">Welcome home</div>
+        <div class="band-title">Good morning, Sarah</div>
+        <div class="band-sub">📍 4234 Elm St · North Dallas, TX</div>
+      </div>
+      <div class="pg">
+        <div class="pv-banner" id="pv-banner">
+          <div style="font-size:15px;font-weight:600;margin-bottom:4px;position:relative;z-index:1">📅 Your visit is in 3 days — June 14</div>
+          <div style="font-size:13px;opacity:.8;margin-bottom:10px;position:relative;z-index:1">Marcus is coming. Here's what to have ready, based on your scheduled tasks:</div>
+          <div class="aib" style="background:rgba(195,166,132,.25);color:#F4EDE2;position:relative;z-index:1">✨ Prepared for you by Haven</div>
+          <div style="margin-bottom:10px;position:relative;z-index:1">
+            <span class="pv-chip">💡 A19 LED 60W bulbs</span>
+            <span class="pv-chip">🔋 9V batteries (smoke detectors)</span>
+            <span class="pv-chip">🚰 Know your water shutoff</span>
+            <span class="pv-chip">🚪 Clear access to back door</span>
+            <span class="pv-chip">🌬️ 20×25×1 HVAC filter</span>
+          </div>
+          <div style="font-size:12px;opacity:.7;margin-bottom:12px;position:relative;z-index:1">Marcus brings all tools — these are home-specific items that help the visit run smoothly.</div>
+          <div style="display:flex;gap:8px;position:relative;z-index:1">
+            <button class="pv-btn solid" onclick="document.getElementById('pv-banner').classList.add('hidden')">✓ Got it, I'm ready</button>
+            <button class="pv-btn ghost" onclick="document.getElementById('pv-banner').classList.add('hidden')">Remind me tomorrow</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="ch"><span class="ct">My honey-do list</span><button class="bo" onclick="cgo('add')">+ Add</button></div>
+          <div id="tasks-list">
+          <div class="tr"><div class="ti">💧</div><div style="flex:1"><div class="tn">Fix leaking kitchen faucet</div><div class="tm">Jun 1 · High priority</div></div><span class="bx bi">In progress</span></div>
+          <div class="tr"><div class="ti">💡</div><div style="flex:1"><div class="tn">Replace porch light fixture</div><div class="tm">May 28 · Medium</div></div><span class="bx bp">Pending</span></div>
+          <div class="tr"><div class="ti">🚪</div><div style="flex:1"><div class="tn">Adjust back door</div><div class="tm">May 20 · Low</div></div><span class="bx bp">Pending</span></div>
+          <div class="tr"><div class="ti">🎨</div><div style="flex:1"><div class="tn">Touch up trim in hallway</div><div class="tm">May 15</div></div><span class="bx bd">Done ✓</span></div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="card" style="margin-bottom:0;cursor:pointer" onclick="cgo('help')">
+            <div style="font-size:22px;margin-bottom:8px">🛟</div>
+            <div style="font-size:13px;font-weight:600">Help center</div>
+            <div style="font-size:11px;color:var(--sub);margin-top:2px">Urgent issues &amp; guides</div>
+          </div>
+          <div class="card" style="margin-bottom:0;cursor:pointer" onclick="cgo('myhome')">
+            <div style="font-size:22px;margin-bottom:8px">🏡</div>
+            <div style="font-size:13px;font-weight:600">My home</div>
+            <div style="font-size:11px;color:var(--sub);margin-top:2px">Profile &amp; supply specs</div>
+          </div>
+          <div class="card" style="margin-bottom:0;cursor:pointer" onclick="cgo('schedule')">
+            <div style="font-size:22px;margin-bottom:8px">📅</div>
+            <div style="font-size:13px;font-weight:600">Schedule</div>
+            <div style="font-size:11px;color:var(--sub);margin-top:2px">Book &amp; manage visits</div>
+          </div>
+          <div class="card" style="margin-bottom:0;cursor:pointer" onclick="cgo('reports')">
+            <div style="font-size:22px;margin-bottom:8px">📄</div>
+            <div style="font-size:13px;font-weight:600">Reports</div>
+            <div style="font-size:11px;color:var(--sub);margin-top:2px">Your home's records</div>
+          </div>
+          <div class="card" style="margin-bottom:0;cursor:pointer" onclick="cgo('billing')">
+            <div style="font-size:22px;margin-bottom:8px">💳</div>
+            <div style="font-size:13px;font-weight:600">Billing</div>
+            <div style="font-size:11px;color:var(--sub);margin-top:2px">Plan &amp; payment</div>
+          </div>
+          <div class="card" style="margin-bottom:0;cursor:pointer" onclick="cgo('referral')">
+            <div style="font-size:22px;margin-bottom:8px">🎁</div>
+            <div style="font-size:13px;font-weight:600">Refer &amp; gift</div>
+            <div style="font-size:11px;color:var(--sub);margin-top:2px">Give a month, get a month</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADD TASK ── -->
+    <div id="c-add" class="cpanel hidden">
+      <div class="pg">
+        <div class="card">
+          <div class="ch"><span class="ct">Add a task</span><button class="bo" onclick="cback()">‹ Back</button></div>
+          <div class="sec">Choose a service</div>
+          <div class="si" onclick="pickSvc('Plumbing repair')"><span style="font-size:22px;width:28px">💧</span><div style="flex:1"><div style="font-size:14px;font-weight:600">Plumbing repair</div><div style="font-size:12px;color:var(--sub)">Leaks, drips, clogs</div></div><span style="font-size:20px;color:var(--gold-deep)">+</span></div>
+          <div class="si" onclick="pickSvc('Electrical — light fixtures')"><span style="font-size:22px;width:28px">💡</span><div style="flex:1"><div style="font-size:14px;font-weight:600">Electrical — light fixtures</div><div style="font-size:12px;color:var(--sub)">Replace, install, repair</div></div><span style="font-size:20px;color:var(--gold-deep)">+</span></div>
+          <div class="si" onclick="pickSvc('Door &amp; window')"><span style="font-size:22px;width:28px">🚪</span><div style="flex:1"><div style="font-size:14px;font-weight:600">Door &amp; window</div><div style="font-size:12px;color:var(--sub)">Sticking, alignment, weatherstrip</div></div><span style="font-size:20px;color:var(--gold-deep)">+</span></div>
+          <div class="si" onclick="pickSvc('House cleaning')"><span style="font-size:22px;width:28px">🏠</span><div style="flex:1"><div style="font-size:14px;font-weight:600">House cleaning</div><div style="font-size:12px;color:var(--sub)">Deep clean, regular maintenance</div></div><span style="font-size:20px;color:var(--gold-deep)">+</span></div>
+          <div class="si" onclick="pickSvc('Closet organizing')"><span style="font-size:22px;width:28px">🗂</span><div style="flex:1"><div style="font-size:14px;font-weight:600">Closet organizing</div><div style="font-size:12px;color:var(--sub)">Declutter, organize, optimize</div></div><span style="font-size:20px;color:var(--gold-deep)">+</span></div>
+          <div class="si" onclick="pickSvc('Holiday decorating')"><span style="font-size:22px;width:28px">🎄</span><div style="flex:1"><div style="font-size:14px;font-weight:600">Holiday decorating</div><div style="font-size:12px;color:var(--sub)">Setup, display, takedown</div></div><span style="font-size:20px;color:var(--gold-deep)">+</span></div>
+          <div id="svc-form" class="hidden" style="margin-top:14px;padding-top:14px;border-top:1px solid #F1EDE6">
+            <div class="aib">✓ <span id="svc-name"></span> selected</div>
+            <div style="display:flex;gap:12px;align-items:center;margin:12px 0">
+              <button class="mb" id="cmic" onclick="tmic('cmic','cdr')">🎤</button>
+              <div><div style="font-size:14px;font-weight:600">Tap mic to describe your task</div><div style="font-size:12px;color:var(--sub)">Haven cleans and structures your description</div></div>
+            </div>
+            <div id="cdr"><div class="aib hidden" id="cdr-chip">✨ Cleaned up for you</div><div class="ig"><label>Task description</label><textarea id="task-desc" placeholder="Describe what needs doing..."></textarea></div></div>
+            <div class="ig"><label>Priority</label><select id="task-priority"><option>High</option><option selected>Medium</option><option>Low</option></select></div>
+            <div class="ub">📷 Add photos</div>
+            <div id="task-err" class="err-box hidden"></div>
+            <button class="bp1" id="save-task-btn" onclick="saveTask()">Save task</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SCHEDULE ── -->
+    <div id="c-schedule" class="cpanel hidden">
+      <div class="band">
+        <div class="band-back" onclick="cback()">‹ Back</div>
+        <div class="eyebrow">Your calendar</div>
+        <div class="band-title">Schedule</div>
+        <div class="band-sub">Book your next visit with Marcus.</div>
+      </div>
+      <div class="pg">
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:13px;margin-bottom:14px">
+            <div style="width:54px;height:54px;background:var(--gold-tint);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0">
+              <span class="serif" style="font-size:21px;font-weight:500;color:var(--blue);line-height:1">14</span>
+              <span style="font-size:9px;color:var(--gold-deep);font-weight:700;letter-spacing:.1em">JUN</span>
+            </div>
+            <div><div style="font-size:15px;font-weight:600">Thursday, June 14</div><div style="font-size:13px;color:var(--sub);margin-top:2px">9:00–11:00 AM · Marcus, your handyman</div></div>
+          </div>
+          <div style="background:var(--gold-tint);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <div class="av" style="width:34px;height:34px;font-size:12px">MT</div>
+            <div><div style="font-size:13px;font-weight:600">Marcus Thompson</div><div style="font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px">✓ Background checked · Haven certified</div></div>
+          </div>
+          <div class="sec" style="margin-left:0">Available slots — North Dallas zone</div>
+          <div class="sg">
+            <div class="sl on">Jun 14<br>9–11am</div><div class="sl">Jun 14<br>1–3pm</div><div class="sl fl">Jun 18<br>9–11am</div>
+            <div class="sl">Jun 19<br>9–11am</div><div class="sl">Jun 21<br>1–3pm</div><div class="sl">Jun 25<br>9–11am</div>
+          </div>
+          <button class="bp1">Confirm slot</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── HELP CENTER ── -->
+    <div id="c-help" class="cpanel hidden">
+      <div class="band">
+        <div class="band-back" onclick="cback()">‹ Back</div>
+        <div class="eyebrow">We're here</div>
+        <div class="band-title">Help center</div>
+        <div class="band-sub">Guidance for the moments that matter.</div>
+      </div>
+      <div class="pg">
+        <div class="urg-banner">
+          <div style="font-size:14px;font-weight:700;color:var(--red);margin-bottom:5px">⚠️ Have an urgent issue?</div>
+          <div style="font-size:13px;color:#8E2E27;margin-bottom:10px;line-height:1.5">Storm damage, flooding, HVAC failure — tap for priority scheduling. Management and your handyman are notified immediately.</div>
+          <button class="bp1 red" style="margin-top:0" onclick="cgo('urgent')">🚨 Request urgent service</button>
+        </div>
+        <div class="sec">What to do when…</div>
+        <div class="card" style="border-left:3px solid var(--red);margin-bottom:10px">
+          <span class="bx bu" style="display:inline-block;margin-bottom:8px">⚠️ Storm damage</span>
+          <div class="serif" style="font-size:16px;font-weight:500;margin-bottom:5px">After a storm — roof &amp; exterior</div>
+          <div style="font-size:13px;color:var(--sub);line-height:1.6">Don't go on the roof yourself. Document damage with photos, check for interior water intrusion. Most insurance claims require professional documentation within 48–72 hours.</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--red);margin-bottom:10px">
+          <span class="bx bu" style="display:inline-block;margin-bottom:8px">⚠️ Flooding</span>
+          <div class="serif" style="font-size:16px;font-weight:500;margin-bottom:5px">Water in your home</div>
+          <div style="font-size:13px;color:var(--sub);line-height:1.6">Turn off main water supply, cut power to affected areas, document everything. Call Haven — water damage worsens quickly.</div>
+        </div>
+        <div class="card" style="margin-bottom:10px">
+          <span class="bx bi" style="display:inline-block;margin-bottom:8px">🌡 HVAC</span>
+          <div class="serif" style="font-size:16px;font-weight:500;margin-bottom:5px">AC stops working in Texas heat</div>
+          <div style="font-size:13px;color:var(--sub);line-height:1.6">Check thermostat and breaker first. Replace filter if clogged. If the unit won't run, schedule a priority visit.</div>
+        </div>
+        <div class="card">
+          <span class="bx bi" style="display:inline-block;margin-bottom:8px">❄️ Seasonal</span>
+          <div class="serif" style="font-size:16px;font-weight:500;margin-bottom:5px">Preparing for DFW winters</div>
+          <div style="font-size:13px;color:var(--sub);line-height:1.6">Insulate exposed pipes, know your shutoff valve, schedule a Haven winterization check in November.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── URGENT ── -->
+    <div id="c-urgent" class="cpanel hidden">
+      <div class="pg">
+        <div class="card" style="border:1.5px solid var(--red)">
+          <div class="ch"><span class="ct" style="color:var(--red)">🚨 Urgent request</span><button class="bo" onclick="cback()">‹ Back</button></div>
+          <div class="ig"><label>Type of emergency</label><select><option>Storm / roof damage</option><option>Flooding / water intrusion</option><option>HVAC failure</option><option>Electrical issue</option><option>Other urgent</option></select></div>
+          <div class="ig"><label>Describe the situation</label><textarea placeholder="What happened and current condition..."></textarea></div>
+          <div class="ub">📷 Add photos of the damage</div>
+          <div style="background:var(--amber-bg);border-radius:10px;padding:12px;margin-top:12px;font-size:13px;color:var(--amber);line-height:1.5">🔔 Submitting notifies Haven management and Marcus immediately by text &amp; email.</div>
+          <div class="sec" style="margin:14px 0 8px">Priority slots — next 48 hours</div>
+          <div class="sg"><div class="sl ug">Today<br>2–4pm</div><div class="sl ug">Today<br>4–6pm</div><div class="sl ug">Tomorrow<br>8–10am</div></div>
+          <button class="bp1 red">Submit urgent request</button>
+          <div style="text-align:center;font-size:13px;color:var(--sub);margin-top:10px">Or call directly: <strong>469-960-3220</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REPORTS ── -->
+    <div id="c-reports" class="cpanel hidden">
+      <div class="band">
+        <div class="band-back" onclick="cback()">‹ Back</div>
+        <div class="eyebrow">Your Haven Report</div>
+        <div class="band-title">Home records</div>
+        <div class="band-sub">Every visit documented. Your home's permanent record.</div>
+      </div>
+      <div class="pg">
+        <div class="sr">
+          <div class="st"><div class="sn">12</div><div class="sl2">Visits logged</div></div>
+          <div class="st"><div class="sn">38</div><div class="sl2">Tasks completed</div></div>
+          <div class="st"><div class="sn">76</div><div class="sl2">Photos on file</div></div>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">Visit — May 10, 2026</span><span class="bx bd">Published ✓</span></div>
+          <div style="border-left:3px solid var(--gold);padding-left:12px;margin-bottom:12px"><div class="eyebrow" style="margin-bottom:3px">Tasks completed</div><div style="font-size:14px">Touch up trim in hallway · Replaced bathroom caulk</div></div>
+          <div style="border-left:3px solid var(--gold);padding-left:12px;margin-bottom:12px"><div class="eyebrow" style="margin-bottom:3px">Notes</div><div style="font-size:14px">Both tasks completed. Trim looks clean. Caulk fully dried and sealed.</div></div>
+          <div style="display:flex;gap:8px;margin-bottom:10px">
+            <div style="width:56px;height:56px;background:#F3EFE8;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px">📷</div>
+            <div style="width:56px;height:56px;background:#F3EFE8;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px">📷</div>
+          </div>
+          <div class="aib">✓ Reviewed &amp; approved by Haven management</div>
+          <button class="bs">⬇ Download PDF report</button>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">Visit — April 12, 2026</span><span class="bx bd">Published ✓</span></div>
+          <div style="border-left:3px solid var(--gold);padding-left:12px"><div class="eyebrow" style="margin-bottom:3px">Tasks completed</div><div style="font-size:14px">Tightened deck railing · Fixed squeaky stair · Weatherstripping</div></div>
+          <button class="bs">⬇ Download PDF report</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MY HOME ── -->
+    <div id="c-myhome" class="cpanel hidden">
+      <div class="pg">
+        <div class="back-lite" onclick="cback()">‹ Back</div>
+        <div class="hero">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;position:relative;z-index:1">
+            <div><div class="serif" style="font-size:19px;font-weight:500">Sarah Mitchell</div><div style="font-size:13px;opacity:.7;margin-top:2px">4234 Elm St · North Dallas, TX 75248</div></div>
+            <button class="bo" style="border-color:rgba(195,166,132,.5);color:var(--gold);font-size:12px">Edit</button>
+          </div>
+          <div class="hero-grid">
+            <div class="hero-box"><div class="hero-num">2,450</div><div class="hero-lbl">Sq Ft</div></div>
+            <div class="hero-box"><div class="hero-num">2004</div><div class="hero-lbl">Built</div></div>
+            <div class="hero-box"><div class="hero-num">3/2</div><div class="hero-lbl">Bed/Bath</div></div>
+            <div class="hero-box"><div class="hero-num">N. Dallas</div><div class="hero-lbl">Zone</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">Home photos</span><button class="bo">+ Add</button></div>
+          <div class="pg3">
+            <div class="ph filled" style="background:var(--blue-tint)">🏠</div>
+            <div class="ph filled" style="background:#EAF3EC">🌳</div>
+            <div class="ph filled" style="background:var(--gold-tint)">🍳</div>
+            <div class="ph filled" style="background:#F5E9EE">🛁</div>
+            <div class="ph filled" style="background:var(--blue-tint)">🚪</div>
+            <div class="ph" style="color:var(--gold-deep);font-size:13px;flex-direction:column;gap:3px"><span style="font-size:26px">+</span><span>Add</span></div>
+          </div>
+          <div style="font-size:12px;color:var(--faint);text-align:center">Photos help Marcus prepare and build your home's permanent record</div>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">Special features &amp; systems</span><button class="bo">Edit</button></div>
+          <div>
+            <span class="fc">🏊 Pool</span><span class="fc">💧 Sprinkler system</span><span class="fc">🏠 Smart home (Nest)</span>
+            <span class="fc">🔥 Gas fireplace</span><span class="fc">🌳 Large oak trees</span><span class="fc">🚗 2-car garage</span>
+            <span class="fc">☀️ Solar panels</span><span class="fc">🐕 Dog (Buddy)</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">Your home's supply specs</span><button class="bo">Edit</button></div>
+          <div style="font-size:13px;color:var(--sub);margin-bottom:12px;line-height:1.5">Your specific sizes and types. Haven reminds you to have these on hand before each visit.</div>
+          <div class="supr"><div class="supi">🌬️</div><div style="flex:1"><div class="supt">HVAC filter</div><div class="supm">Changed every 60–90 days · 2 units</div></div><span class="sups">20×25×1</span></div>
+          <div class="supr"><div class="supi">💡</div><div style="flex:1"><div class="supt">Interior bulbs</div><div class="supm">Kitchen, living room, hallways</div></div><span class="sups">A19 LED 60W</span></div>
+          <div class="supr"><div class="supi">💡</div><div style="flex:1"><div class="supt">Porch / outdoor bulbs</div><div class="supm">Front porch, back patio</div></div><span class="sups">BR30 65W</span></div>
+          <div class="supr"><div class="supi">🔋</div><div style="flex:1"><div class="supt">Smoke detector batteries</div><div class="supm">5 detectors — checked every visit</div></div><span class="sups">9V</span></div>
+          <div class="supr"><div class="supi">🔋</div><div style="flex:1"><div class="supt">Thermostat batteries</div><div class="supm">Nest thermostat</div></div><span class="sups">AA × 4</span></div>
+          <div class="supr"><div class="supi">🚿</div><div style="flex:1"><div class="supt">Shower filter cartridge</div><div class="supm">Master bath · Berkey system</div></div><span class="sups">Berkey BB9</span></div>
+          <div class="supr"><div class="supi">🌊</div><div style="flex:1"><div class="supt">Water softener salt</div><div class="supm">Morton system in garage</div></div><span class="sups">40 lb crystals</span></div>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">Key access &amp; notes for Marcus</span><button class="bo">Edit</button></div>
+          <div class="kir"><div style="font-size:18px;flex-shrink:0;width:24px">🚰</div><div><div style="font-size:14px;font-weight:600">Water main shutoff</div><div style="font-size:13px;color:var(--sub);margin-top:2px">Left side of house, behind gate, silver handle near AC unit</div></div></div>
+          <div class="kir"><div style="font-size:18px;flex-shrink:0;width:24px">⚡</div><div><div style="font-size:14px;font-weight:600">Breaker panel</div><div style="font-size:13px;color:var(--sub);margin-top:2px">Garage, right wall near door to kitchen. Labeled.</div></div></div>
+          <div class="kir"><div style="font-size:18px;flex-shrink:0;width:24px">🔑</div><div><div style="font-size:14px;font-weight:600">Gate / entry code</div><div style="font-size:13px;color:var(--sub);margin-top:2px">Stored securely with Haven management</div></div></div>
+          <div class="kir"><div style="font-size:18px;flex-shrink:0;width:24px">🐕</div><div><div style="font-size:14px;font-weight:600">Pets</div><div style="font-size:13px;color:var(--sub);margin-top:2px">Buddy (golden retriever) — friendly but barks. Keep back door closed.</div></div></div>
+          <div class="kir"><div style="font-size:18px;flex-shrink:0;width:24px">🚗</div><div><div style="font-size:14px;font-weight:600">Parking</div><div style="font-size:13px;color:var(--sub);margin-top:2px">Use the driveway — Marcus is welcome to pull all the way in</div></div></div>
+          <div class="kir" style="border-bottom:none"><div style="font-size:18px;flex-shrink:0;width:24px">📝</div><div><div style="font-size:14px;font-weight:600">Notes</div><div style="font-size:13px;color:var(--sub);margin-top:2px">Pool equipment on a timer — do not adjust. Solar inverter in utility closet.</div></div></div>
+        </div>
+        <div class="card" style="background:var(--gold-tint);border-color:var(--gold)">
+          <div class="serif" style="font-size:15px;font-weight:500;color:var(--blue);margin-bottom:4px">Keep your profile current</div>
+          <div style="font-size:13px;color:var(--sub);line-height:1.5;margin-bottom:10px">A complete profile lets Haven prepare accurate pre-visit supply lists and helps Marcus show up fully prepared.</div>
+          <button class="bp1" style="margin-top:0">Edit my home profile</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── HOW IT WORKS ── -->
+    <div id="c-howitworks" class="cpanel hidden">
+      <div class="band">
+        <div class="band-back" onclick="cback()">‹ Back</div>
+        <div class="eyebrow">Your membership</div>
+        <div class="band-title">How Haven works</div>
+        <div class="band-sub">Your property should be a haven — not a source of stress.</div>
+      </div>
+      <div class="pg">
+        <div class="card">
+          <div class="ch"><span class="ct">The service, step by step</span></div>
+          <div class="step-row"><div class="bubble">1</div><div><div style="font-size:14px;font-weight:600;margin-bottom:3px">Build your honey-do list</div><div style="font-size:13px;color:var(--sub);line-height:1.5">Add tasks anytime — browse the service menu, tap the mic to dictate, or type it in. Add photos and set priority. Your list stays live between visits.</div></div></div>
+          <div class="step-row"><div class="bubble">2</div><div><div style="font-size:14px;font-weight:600;margin-bottom:3px">Book your visit</div><div style="font-size:13px;color:var(--sub);line-height:1.5">Pick a slot from your zone's calendar. You'll always see the same dedicated handyman who knows your home.</div></div></div>
+          <div class="step-row"><div class="bubble">3</div><div><div style="font-size:14px;font-weight:600;margin-bottom:3px">We handle the rest</div><div style="font-size:13px;color:var(--sub);line-height:1.5">Your handyman arrives prepared. After the visit you'll receive a detailed photo report, reviewed by Haven management before it reaches you.</div></div></div>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">What to expect every visit</span></div>
+          <div class="check-r"><div class="check-dot">✓</div><div><div style="font-size:14px;font-weight:600">Punctual, professional arrival</div><div style="font-size:13px;color:var(--sub);margin-top:2px;line-height:1.4">Reminder 3 days before. Morning-of text from Marcus.</div></div></div>
+          <div class="check-r"><div class="check-dot">✓</div><div><div style="font-size:14px;font-weight:600">Tasks worked in priority order</div><div style="font-size:13px;color:var(--sub);margin-top:2px;line-height:1.4">High-priority first. Anything not reached rolls to the next visit.</div></div></div>
+          <div class="check-r"><div class="check-dot">✓</div><div><div style="font-size:14px;font-weight:600">Before-and-after photo documentation</div><div style="font-size:13px;color:var(--sub);margin-top:2px;line-height:1.4">Every task photographed. Part of your permanent home record.</div></div></div>
+          <div class="check-r"><div class="check-dot">✓</div><div><div style="font-size:14px;font-weight:600">Complete cleanup after each task</div><div style="font-size:13px;color:var(--sub);margin-top:2px;line-height:1.4">You don't need to be home. Just arrange access.</div></div></div>
+          <div class="check-r"><div class="check-dot">✓</div><div><div style="font-size:14px;font-weight:600">Proactive observations flagged</div><div style="font-size:13px;color:var(--sub);margin-top:2px;line-height:1.4">If Marcus notices something off-list, it gets noted in the report.</div></div></div>
+          <div class="check-r"><div class="check-dot">✓</div><div><div style="font-size:14px;font-weight:600">Management-reviewed visit report</div><div style="font-size:13px;color:var(--sub);margin-top:2px;line-height:1.4">Every report approved by Haven management before it reaches you.</div></div></div>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">Membership plans</span></div>
+          <div class="plan-card"><span class="bx bi" style="display:inline-block;margin-bottom:8px">Quarterly</span><div class="serif" style="font-size:16px;font-weight:500;margin-bottom:4px">Quarterly Maintenance</div><div style="font-size:13px;color:var(--sub);line-height:1.5;margin-bottom:8px">One scheduled visit every three months.</div><div><span class="chip">1 visit / quarter</span><span class="chip">Priority scheduling</span><span class="chip">Visit reports</span></div></div>
+          <div class="plan-card feat"><span class="bx" style="background:var(--blue);color:var(--gold);display:inline-block;margin-bottom:8px">⭐ Most popular</span><div class="serif" style="font-size:16px;font-weight:500;color:var(--blue);margin-bottom:4px">Monthly Maintenance</div><div style="font-size:13px;color:var(--sub);line-height:1.5;margin-bottom:8px">One visit every month. Best for active households.</div><div><span class="chip hl">1 visit / month</span><span class="chip hl">Pre-visit prep list</span><span class="chip hl">Urgent request access</span></div></div>
+          <div class="plan-card"><span class="bx br" style="display:inline-block;margin-bottom:8px">À la carte</span><div class="serif" style="font-size:16px;font-weight:500;margin-bottom:4px">Pay-per-visit</div><div style="font-size:13px;color:var(--sub);line-height:1.5">No subscription — book individual visits as needed.</div></div>
+          <div style="font-size:12px;color:var(--faint);text-align:center;margin-top:10px">Pricing at enjoyyourhaven.com or call 469-960-3220</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── DREAMS ── -->
+    <div id="c-dreams" class="cpanel hidden">
+      <div class="band">
+        <div class="band-back" onclick="cback()">‹ Back</div>
+        <div class="eyebrow">Your wishlist</div>
+        <div class="band-title">Dream projects</div>
+        <div class="band-sub serif" style="font-style:italic">Haven can help make these happen.</div>
+      </div>
+      <div class="pg">
+        <div class="add-drm" onclick="toggleDreamForm()">
+          <div style="width:44px;height:44px;border-radius:50%;background:#fff;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--gold-deep)">+</div>
+          <div class="serif" style="font-size:15px;font-weight:500;color:var(--text);margin-bottom:3px">Add a dream project</div>
+          <div style="font-size:12px;color:var(--sub)">Tell Haven what you're envisioning for your home</div>
+        </div>
+        <div id="dream-form" class="hidden">
+          <div class="card" style="border:1.5px solid var(--gold)">
+            <div class="ch"><span class="ct" style="color:var(--gold-deep)">New dream project</span><button class="bo" onclick="toggleDreamForm()">Cancel</button></div>
+            <div class="ig"><label>Project name</label><input type="text" placeholder="e.g. Backyard patio oasis" autocapitalize="words"/></div>
+            <div class="ig"><label>Room / area</label><select><option>Kitchen</option><option>Master bath</option><option>Backyard / outdoor</option><option>Living room</option><option>Garage</option><option>Other</option></select></div>
+            <div class="ig"><label>Describe your vision</label><textarea placeholder="What do you want it to look like, feel like?"></textarea></div>
+            <div class="ig"><label>Status</label><select><option>Someday — just dreaming</option><option>Planning — actively researching</option><option>Ready to start</option></select></div>
+            <div class="ig">
+              <label>Rough budget range</label>
+              <div class="budget-row">
+                <div class="budget-chip" onclick="selBudget(this)">Under $1K</div>
+                <div class="budget-chip on" onclick="selBudget(this)">$1K–$5K</div>
+                <div class="budget-chip" onclick="selBudget(this)">$5K–$15K</div>
+              </div>
+              <div class="budget-row">
+                <div class="budget-chip" onclick="selBudget(this)">$15K–$50K</div>
+                <div class="budget-chip" onclick="selBudget(this)">$50K+</div>
+                <div class="budget-chip" onclick="selBudget(this)">Not sure yet</div>
+              </div>
+            </div>
+            <button class="bp1 gold" style="margin-top:12px">Save dream project</button>
+          </div>
+        </div>
+        <div class="dream-card">
+          <div class="dream-img">🍳</div>
+          <span class="dream-badge planning">📋 Planning</span>
+          <div class="serif" style="font-size:17px;font-weight:500;margin-bottom:4px">Full kitchen renovation</div>
+          <div style="font-size:13px;color:var(--sub);line-height:1.5;margin-bottom:10px">Open up to living room, quartz counters, new island with seating, upgraded appliances.</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="font-size:12px;color:var(--faint)">💰 Budget range</div><div class="serif" style="font-size:14px;font-weight:500">$25K–$50K</div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <button class="bs" style="margin-top:0;font-size:13px">Edit project</button>
+            <button class="bp1 gold" style="margin-top:0;font-size:13px">Talk to Haven →</button>
+          </div>
+        </div>
+        <div class="dream-card">
+          <div class="dream-img" style="background:linear-gradient(135deg,#E7F0E9,#D3E5D8)">🌿</div>
+          <span class="dream-badge ready">✅ Ready to start</span>
+          <div class="serif" style="font-size:17px;font-weight:500;margin-bottom:4px">Backyard patio &amp; pergola</div>
+          <div style="font-size:13px;color:var(--sub);line-height:1.5;margin-bottom:10px">Extended covered patio with pergola, string lights, built-in grill. Entertain year-round in DFW.</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="font-size:12px;color:var(--faint)">💰 Budget range</div><div class="serif" style="font-size:14px;font-weight:500">$10K–$20K</div></div>
+          <div style="background:var(--green-bg);border-radius:10px;padding:11px;font-size:13px;color:var(--green);line-height:1.5;margin-bottom:10px">✅ <strong>You're ready.</strong> Haven can connect you with vetted contractors.</div>
+          <button class="bp1" style="background:var(--green);margin-top:0">Connect me with a contractor →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── COMMUNITY ── -->
+    <div id="c-community" class="cpanel hidden">
+      <div class="band">
+        <div class="band-back" onclick="cback()">‹ Back</div>
+        <div class="eyebrow">Haven family</div>
+        <div class="band-title">Community</div>
+        <div class="band-sub">Tips, stories, and your people.</div>
+      </div>
+      <div class="pg">
+        <div class="grandpa">
+          <div class="gp-icon">👴</div>
+          <div>
+            <div class="serif" style="font-size:16px;font-weight:500;margin-bottom:4px">Ask Grandpa</div>
+            <div style="font-size:12px;color:var(--sub);line-height:1.6;margin-bottom:8px">Sage home wisdom from people who have kept houses standing for decades. Time-tested answers for modern homeowners.</div>
+            <div style="font-size:13px;color:var(--gold-deep);font-weight:600;cursor:pointer">Browse wisdom →</div>
+          </div>
+        </div>
+        <div class="sec">Haven tips &amp; tricks</div>
+        <div class="card" style="margin-bottom:10px"><span class="bx bi" style="display:inline-block;margin-bottom:8px">🌡 Seasonal</span><div class="serif" style="font-size:15px;font-weight:500;margin-bottom:5px">Prep your AC before the Texas heat hits</div><div style="font-size:13px;color:var(--sub);line-height:1.5">Change your filter, clear debris from the outdoor unit, and schedule a tune-up before temps climb past 100°F.</div></div>
+        <div class="card" style="margin-bottom:10px"><span class="bx br" style="display:inline-block;margin-bottom:8px">💬 Guidance</span><div class="serif" style="font-size:15px;font-weight:500;margin-bottom:5px">When to call us vs. wait for your next visit</div><div style="font-size:13px;color:var(--sub);line-height:1.5">Active leaks, power loss, HVAC out in extreme weather, or gas smell — call now. Slow drips, one bad bulb, or a sticky door can wait for your visit.</div></div>
+        <div class="card"><span class="bx bd" style="display:inline-block;margin-bottom:8px">⚡ Savings</span><div class="serif" style="font-size:15px;font-weight:500;margin-bottom:5px">How preventive care saves you $3,500 a year</div><div style="font-size:13px;color:var(--sub);line-height:1.5">A clogged filter makes your HVAC fail years sooner. A slow drip wastes 3,000 gallons a year. Haven catches these before they get expensive.</div></div>
+        <div class="sec" style="margin-top:18px">What Haven clients are saying</div>
+        <div class="story">
+          <div class="story-q">"She came in so quietly — like a ninja. I didn't even know she had been there until I used the faucet and it worked better than it ever had."</div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="av" style="width:30px;height:30px;font-size:12px;background:var(--gold-tint);color:var(--gold-deep)">S</div>
+            <div><div style="font-size:12px;color:var(--sub)">Haven subscriber · Frisco, TX</div><div class="stars">★★★★★</div></div>
+          </div>
+        </div>
+        <div class="story">
+          <div class="story-q">"I was nervous to let anyone into my home. Haven sent me Marcus's full profile before he arrived. By the time he knocked, I already trusted him. That means everything to me."</div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="av" style="width:30px;height:30px;font-size:12px;background:var(--gold-tint);color:var(--gold-deep)">M</div>
+            <div><div style="font-size:12px;color:var(--sub)">Haven subscriber · Plano, TX</div><div class="stars">★★★★★</div></div>
+          </div>
+        </div>
+        <div class="story">
+          <div class="story-q">"My kids worried every time I got on a ladder. Now they call Haven instead of worrying about me. I still know exactly what needs doing — I just let someone else climb up there."</div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="av" style="width:30px;height:30px;font-size:12px;background:var(--gold-tint);color:var(--gold-deep)">D</div>
+            <div><div style="font-size:12px;color:var(--sub)">Haven subscriber · Allen, TX · Age 74</div><div class="stars">★★★★★</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REFER & GIFT ── -->
+    <div id="c-referral" class="cpanel hidden">
+      <div class="band">
+        <div class="band-back" onclick="cback()">‹ Back</div>
+        <div class="eyebrow">Share the care</div>
+        <div class="band-title">Refer &amp; gift</div>
+        <div class="band-sub">Give a month. Get a month.</div>
+      </div>
+      <div class="pg">
+        <div class="referral-card">
+          <div class="serif" style="font-size:18px;font-weight:500;color:#fff;margin-bottom:4px;position:relative;z-index:1">Give a month. Get a month.</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:16px;line-height:1.5;position:relative;z-index:1">Share Haven with someone who deserves a home that takes care of itself.</div>
+          <div class="ref-code-box">
+            <div class="ref-code">SARAH-HAVEN</div>
+            <button class="copy-btn" onclick="this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',2000)">Copy</button>
+          </div>
+          <div style="font-size:12px;color:rgba(255,255,255,.45);text-align:center;line-height:1.5;position:relative;z-index:1">Your friend gets their first month free · You receive a month's credit when they subscribe</div>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">Your referrals</span></div>
+          <div style="display:flex">
+            <div style="text-align:center;flex:1"><div class="sn">3</div><div style="font-size:12px;color:var(--faint)">Referred</div></div>
+            <div style="text-align:center;flex:1"><div class="sn">2</div><div style="font-size:12px;color:var(--faint)">Signed up</div></div>
+            <div style="text-align:center;flex:1"><div class="sn">1</div><div style="font-size:12px;color:var(--faint)">Active</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">Gift a membership</span></div>
+          <div class="ig"><label>Recipient name</label><input type="text" placeholder="e.g. Mom, John &amp; Lisa" autocapitalize="words"/></div>
+          <div class="ig"><label>Recipient email</label><input type="email" placeholder="they'll get an activation link" autocapitalize="none"/></div>
+          <div class="ig"><label>Personal message (optional)</label><textarea placeholder="Add a note to go with the gift..."></textarea></div>
+          <button class="bp1">Send gift 🎁</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BILLING ── -->
+    <div id="c-billing" class="cpanel hidden">
+      <div class="band">
+        <div class="band-back" onclick="cback()">‹ Back</div>
+        <div class="eyebrow">Your membership</div>
+        <div class="band-title">Billing</div>
+        <div class="band-sub">Simple, predictable, prepaid.</div>
+      </div>
+      <div class="pg">
+        <div class="card">
+          <div class="ch"><span class="ct">Current plan</span><span class="bx bd">Active ✓</span></div>
+          <div class="serif" style="font-size:23px;font-weight:500;color:var(--blue);margin-bottom:4px">Haven Monthly</div>
+          <div style="font-size:13px;color:var(--sub)">Billed monthly · Next invoice: Jul 1, 2026</div>
+          <div style="border-top:1px solid #F1EDE6;margin-top:13px;padding-top:13px;display:flex;align-items:center;gap:10px"><span style="font-size:20px">💳</span><span style="font-size:14px">Visa ending in 4291</span></div>
+          <button class="bs">Update payment method</button>
+          <button class="bs">Pause membership</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MORE ── -->
+    <div id="c-more" class="cpanel hidden">
+      <div class="band">
+        <div class="band-back" onclick="cback()">‹ Back</div>
+        <div class="eyebrow">Everything else</div>
+        <div class="band-title">More</div>
+        <div class="band-sub">Your full Haven experience.</div>
+      </div>
+      <div class="pg">
+        <div class="more-item" onclick="cgo('myhome')"><div class="more-ic">🏡</div><div><div class="more-t">My home</div><div class="more-s">Profile, photos, supply specs, access notes</div></div><span class="more-arr">›</span></div>
+        <div class="more-item" onclick="cgo('help')"><div class="more-ic">🛟</div><div><div class="more-t">Help center</div><div class="more-s">Urgent requests &amp; what-to-do guides</div></div><span class="more-arr">›</span></div>
+        <div class="more-item" onclick="cgo('howitworks')"><div class="more-ic">✨</div><div><div class="more-t">How Haven works</div><div class="more-s">Your membership, step by step</div></div><span class="more-arr">›</span></div>
+        <div class="more-item" onclick="cgo('community')"><div class="more-ic">💬</div><div><div class="more-t">Community</div><div class="more-s">Tips, stories, and Ask Grandpa</div></div><span class="more-arr">›</span></div>
+        <div class="more-item" onclick="cgo('referral')"><div class="more-ic">🎁</div><div><div class="more-t">Refer &amp; gift</div><div class="more-s">Give a month, get a month</div></div><span class="more-arr">›</span></div>
+        <div class="more-item" onclick="cgo('billing')"><div class="more-ic">💳</div><div><div class="more-t">Billing</div><div class="more-s">Plan, payment, and invoices</div></div><span class="more-arr">›</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="nav">
+    <button class="nav-tab on" id="t-home" onclick="cgo('home')">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="nav-lbl">Home</span>
+    </button>
+    <button class="nav-tab" id="t-community" onclick="cgo('community')">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span class="nav-lbl">Community</span>
+    </button>
+    <button class="nav-tab" id="t-dreams" onclick="cgo('dreams')">
+      <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span class="nav-lbl">Dreams</span>
+    </button>
+    <button class="nav-tab" id="t-more" onclick="cgo('more')">
+      <svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>
+      <span class="nav-lbl">More</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════ HANDYMAN ══════════ -->
+<div id="sc-handyman" class="hidden" style="display:flex;flex-direction:column;flex:1">
+  <div class="topbar">
+    <div class="logo">
+      <svg class="logo-mark" viewBox="0 0 100 100" fill="none" stroke="#C3A684" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 88 V46 A28 30 0 0 1 78 46 V88 Z"/><path d="M22 46 H78"/><path d="M50 16 V30"/><path d="M31 22 L38 34"/><path d="M69 22 L62 34"/><path d="M34 88 V50 L50 38 L66 50 V88"/><path d="M50 62 V74"/><path d="M34 76 H66"/>
+      </svg>
+      <div><div class="logo-name">Haven&#8217;s Honey Do&#8217;s</div><div class="logo-sub">Handyman Portal</div></div>
+    </div>
+    
+  </div>
+  <div class="atabs" id="h-tabs">
+    <div class="at on" onclick="hst('h-dash',0)">Dashboard</div>
+    <div class="at" onclick="hst('h-clients',1)">My clients</div>
+    <div class="at" onclick="hst('h-log',2)">Log visit</div>
+    <div class="at" onclick="hst('h-inst',3)">Task guide</div>
+  </div>
+  <div class="backbar" id="h-back"><button onclick="hback()">‹ Back</button></div>
+  <div class="scroll-area">
+  <div class="pg">
+    <div id="h-dash">
+      <div class="sr">
+        <div class="st"><div class="sn">8</div><div class="sl2">Clients</div></div>
+        <div class="st"><div class="sn">3</div><div class="sl2">This week</div></div>
+        <div class="st"><div class="sn">14</div><div class="sl2">Open tasks</div></div>
+      </div>
+      <div class="sec">Today's schedule</div>
+      <div class="card">
+        <div class="cr"><div class="av">SM</div><div style="flex:1"><div style="font-size:14px;font-weight:600">Sarah Mitchell</div><div style="font-size:13px;color:var(--sub);margin-top:2px">9:00 AM · 4234 Elm St, N. Dallas · 3 tasks</div></div><span class="bx bi">Now</span></div>
+        <div class="cr"><div class="av">JR</div><div style="flex:1"><div style="font-size:14px;font-weight:600">James Rodriguez</div><div style="font-size:13px;color:var(--sub);margin-top:2px">1:00 PM · 812 Maple Ave, Plano · 2 tasks</div></div><span class="bx bp">Up next</span></div>
+      </div>
+      <div class="sec">Sarah Mitchell — open tasks</div>
+      <div class="card">
+        <div class="tr"><div class="ti">💧</div><div style="flex:1"><div class="tn">Fix leaking kitchen faucet</div><div class="tm">High priority</div></div><span class="bx bi">In progress</span></div>
+        <div class="tr"><div class="ti">💡</div><div style="flex:1"><div class="tn">Replace porch light fixture</div><div class="tm">Medium</div></div><span class="bx bp">Pending</span></div>
+        <div class="tr"><div class="ti">🚪</div><div style="flex:1"><div class="tn">Adjust back door</div><div class="tm">Low</div></div><span class="bx bp">Pending</span></div>
+      </div>
+    </div>
+    <div id="h-clients" class="hidden">
+      <div class="back-lite" onclick="hback()">‹ Back</div>
+      <div class="card">
+        <div class="ch"><span class="ct">My clients</span></div>
+        <div class="cr"><div class="av">SM</div><div style="flex:1"><div style="font-size:14px;font-weight:600">Sarah Mitchell</div><div style="font-size:13px;color:var(--sub);margin-top:2px">North Dallas · Jun 14 · 3 tasks</div></div></div>
+        <div class="cr"><div class="av">JR</div><div style="flex:1"><div style="font-size:14px;font-weight:600">James Rodriguez</div><div style="font-size:13px;color:var(--sub);margin-top:2px">Plano · Jun 14 · 2 tasks</div></div></div>
+        <div class="cr"><div class="av">TW</div><div style="flex:1"><div style="font-size:14px;font-weight:600">Tamara Williams</div><div style="font-size:13px;color:var(--sub);margin-top:2px">Frisco · Jun 19 · 1 task</div></div></div>
+        <div class="cr"><div class="av">BK</div><div style="flex:1"><div style="font-size:14px;font-weight:600">Brian Kim</div><div style="font-size:13px;color:var(--sub);margin-top:2px">North Dallas · Jun 21 · 4 tasks</div></div></div>
+      </div>
+    </div>
+    <div id="h-log" class="hidden">
+      <div class="back-lite" onclick="hback()">‹ Back</div>
+      <div class="card">
+        <div class="ch"><span class="ct">Log a visit</span></div>
+        <div class="ig"><label>Client</label><select><option>Sarah Mitchell</option><option>James Rodriguez</option><option>Tamara Williams</option></select></div>
+        <div class="ig"><label>Tasks completed</label>
+          <div style="display:flex;flex-direction:column;gap:9px;margin-top:6px">
+            <label style="display:flex;align-items:center;gap:10px;font-size:14px;min-height:44px"><input type="checkbox" checked style="width:20px;height:20px;accent-color:#135182"/> Fix leaking kitchen faucet</label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:14px;min-height:44px"><input type="checkbox" style="width:20px;height:20px;accent-color:#135182"/> Replace porch light fixture</label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:14px;min-height:44px"><input type="checkbox" style="width:20px;height:20px;accent-color:#135182"/> Adjust back door</label>
+          </div>
+        </div>
+        <div class="sec" style="margin-top:14px">Visit notes</div>
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
+          <button class="mb" id="hmic" onclick="tmic('hmic','hdr')">🎤</button>
+          <div><div style="font-size:14px;font-weight:600">Tap to dictate notes</div><div style="font-size:13px;color:var(--sub)">Haven structures your report for management review</div></div>
+        </div>
+        <div id="hdr" class="hidden"><div class="aib">✨ Structured — review before submitting</div><div class="ig"><textarea style="height:100px">Fixed leaking kitchen faucet — replaced hot water cartridge, tested for 5 minutes, no further dripping. Attempted porch light fixture replacement but discovered wiring issue requiring licensed electrician. Flagged for follow-up. Back door adjusted and planed — opens and closes smoothly.</textarea></div></div>
+        <div class="ub">📷 Upload visit photos</div>
+        <button class="bp1">Submit to management for review →</button>
+      </div>
+    </div>
+    <div id="h-inst" class="hidden">
+      <div class="back-lite" onclick="hback()">‹ Back</div>
+      <div class="card">
+        <div class="ch"><span class="ct">Task instruction guide</span></div>
+        <div class="ig"><label>Select task</label>
+          <select id="isel" onchange="showInst()">
+            <option value="">— Choose a task —</option>
+            <option value="faucet">Plumbing — fix leaking faucet</option>
+            <option value="light">Electrical — replace light fixture</option>
+            <option value="door">Door adjustment — sticking door</option>
+            <option value="caulk">Bathroom caulking</option>
+          </select>
+        </div>
+        <div id="icontent" class="hidden">
+          <div class="id" id="isteps" style="font-size:14px"></div>
+          <div class="vt"><div style="font-size:30px;margin-bottom:6px;color:var(--gold)">▶</div><div id="ivlabel" style="font-size:14px;color:rgba(255,255,255,.85);font-weight:500"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ══════════ ADMIN ══════════ -->
+<div id="sc-admin" class="hidden" style="display:flex;flex-direction:column;flex:1">
+  <div class="topbar">
+    <div class="logo">
+      <svg class="logo-mark" viewBox="0 0 100 100" fill="none" stroke="#C3A684" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 88 V46 A28 30 0 0 1 78 46 V88 Z"/><path d="M22 46 H78"/><path d="M50 16 V30"/><path d="M31 22 L38 34"/><path d="M69 22 L62 34"/><path d="M34 88 V50 L50 38 L66 50 V88"/><path d="M50 62 V74"/><path d="M34 76 H66"/>
+      </svg>
+      <div><div class="logo-name">Haven&#8217;s Honey Do&#8217;s</div><div class="logo-sub">Management Portal</div></div>
+    </div>
+    
+  </div>
+  <div class="atabs" id="a-tabs">
+    <div class="at on" onclick="ast('a-dash',0)">Dashboard</div>
+    <div class="at" onclick="ast('a-approvals',1)">Approvals</div>
+    <div class="at" onclick="ast('a-svc',2)">Services</div>
+    <div class="at" onclick="ast('a-help',3)">Help center</div>
+    <div class="at" onclick="ast('a-sched',4)">Scheduling</div>
+    <div class="at" onclick="ast('a-sec',5)">Security</div>
+  </div>
+  <div class="backbar" id="a-back"><button onclick="aback()">‹ Back</button></div>
+  <div class="scroll-area">
+  <div class="pg">
+    <div id="a-dash">
+      <div class="sr">
+        <div class="st"><div class="sn">24</div><div class="sl2">Clients</div></div>
+        <div class="st"><div class="sn">3</div><div class="sl2">Handymen</div></div>
+        <div class="st"><div class="sn" style="color:var(--red)">2</div><div class="sl2">Need review</div></div>
+      </div>
+      <div class="sec">Pending approvals</div>
+      <div class="card">
+        <div class="cr"><div class="av">SM</div><div style="flex:1"><div style="font-size:14px;font-weight:600">Sarah Mitchell</div><div style="font-size:13px;color:var(--sub);margin-top:2px">Jun 14 · Marcus T. · 3 tasks</div></div><span class="bx br">Review</span></div>
+        <div class="cr"><div class="av">JR</div><div style="flex:1"><div style="font-size:14px;font-weight:600">James Rodriguez</div><div style="font-size:13px;color:var(--sub);margin-top:2px">Jun 12 · Marcus T. · 2 tasks</div></div><span class="bx bd">Approved ✓</span></div>
+      </div>
+      <div class="sec">Urgent requests</div>
+      <div class="card">
+        <div class="cr"><div class="av" style="background:var(--red-bg);color:var(--red);font-family:'Inter',sans-serif">⚠</div><div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--red)">Lisa Hernandez — storm damage</div><div style="font-size:13px;color:var(--sub);margin-top:2px">Today 11:42am · N. Dallas · Marcus notified ✓</div></div><span class="bx bu">Urgent</span></div>
+      </div>
+    </div>
+    <div id="a-approvals" class="hidden">
+      <div class="back-lite" onclick="aback()">‹ Back</div>
+      <div class="sec">Sarah Mitchell — Jun 14 visit</div>
+      <div class="card"><div class="ch"><span class="ct">Raw dictation</span><span style="font-size:12px;color:var(--faint)">Handyman's words</span></div><div class="raw">uh so i fixed the faucet yeah replaced the cartridge thing the hot water one, tested it for like 5 minutes looks good. the porch light i couldn't do it there's some weird wiring in there probably needs a real electrician. back door i planed it down opens fine now</div></div>
+      <div class="card"><div class="ch"><span class="ct">Cleaned version</span><span class="aib" style="margin-bottom:0">✨ Haven</span></div><div class="cln">Fixed leaking kitchen faucet — replaced hot water cartridge, tested for 5 minutes, no further dripping. Attempted porch light fixture replacement but discovered wiring issue requiring licensed electrician. Flagged for follow-up. Back door adjusted and planed — opens and closes smoothly.</div></div>
+      <div class="card">
+        <div class="ch"><span class="ct">Edit before publishing</span></div>
+        <div class="ig"><textarea style="height:100px">Fixed leaking kitchen faucet — replaced hot water cartridge, tested for 5 minutes, no further dripping. Attempted porch light fixture replacement but discovered wiring issue requiring licensed electrician. Flagged for follow-up. Back door adjusted and planed — opens and closes smoothly.</textarea></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="bp1" style="margin-top:0;font-size:14px">✓ Approve &amp; publish</button><button class="bs" style="margin-top:0;font-size:14px">↩ Send back</button></div>
+      </div>
+    </div>
+    <div id="a-svc" class="hidden">
+      <div class="back-lite" onclick="aback()">‹ Back</div>
+      <div class="card">
+        <div class="ch"><span class="ct">Service menu</span><button class="bo">+ Add</button></div>
+        <div class="tr"><div class="ti">💧</div><div style="flex:1"><div class="tn">Plumbing repair</div><div class="tm">Leaks, drips, clogs</div></div><button class="bo" style="padding:6px 12px;font-size:13px;min-height:36px">Edit</button></div>
+        <div class="tr"><div class="ti">💡</div><div style="flex:1"><div class="tn">Electrical — light fixtures</div><div class="tm">Replace, install, repair</div></div><button class="bo" style="padding:6px 12px;font-size:13px;min-height:36px">Edit</button></div>
+        <div class="tr"><div class="ti">🚪</div><div style="flex:1"><div class="tn">Door &amp; window</div><div class="tm">Sticking, alignment</div></div><button class="bo" style="padding:6px 12px;font-size:13px;min-height:36px">Edit</button></div>
+        <div class="tr"><div class="ti">🏠</div><div style="flex:1"><div class="tn">House cleaning</div><div class="tm">Deep clean, maintenance</div></div><button class="bo" style="padding:6px 12px;font-size:13px;min-height:36px">Edit</button></div>
+      </div>
+    </div>
+    <div id="a-help" class="hidden">
+      <div class="back-lite" onclick="aback()">‹ Back</div>
+      <div class="card">
+        <div class="ch"><span class="ct">Help center articles</span><button class="bo">+ New</button></div>
+        <div class="tr"><div class="ti" style="background:var(--red-bg)">⚠️</div><div style="flex:1"><div class="tn">After a storm — roof &amp; exterior</div><div class="tm">Urgent · Published May 1</div></div><button class="bo" style="padding:6px 12px;min-height:36px">Edit</button></div>
+        <div class="tr"><div class="ti" style="background:var(--red-bg)">⚠️</div><div style="flex:1"><div class="tn">Flooding — immediate steps</div><div class="tm">Urgent · Published May 1</div></div><button class="bo" style="padding:6px 12px;min-height:36px">Edit</button></div>
+        <div class="tr"><div class="ti">🌡</div><div style="flex:1"><div class="tn">AC stops working in Texas heat</div><div class="tm">HVAC · Published Apr 15</div></div><button class="bo" style="padding:6px 12px;min-height:36px">Edit</button></div>
+      </div>
+    </div>
+    <div id="a-sched" class="hidden">
+      <div class="back-lite" onclick="aback()">‹ Back</div>
+      <div class="card">
+        <div class="ch"><span class="ct">Zone management</span></div>
+        <div class="tr"><div class="ti">📍</div><div style="flex:1"><div class="tn">North Dallas</div><div class="tm">8 clients · Marcus T.</div></div><span class="bx bi">Active</span></div>
+        <div class="tr"><div class="ti">📍</div><div style="flex:1"><div class="tn">Plano / Frisco</div><div class="tm">7 clients · Marcus T.</div></div><span class="bx bi">Active</span></div>
+        <div class="tr"><div class="ti">📍</div><div style="flex:1"><div class="tn">Southlake / Keller</div><div class="tm">5 clients · David R.</div></div><span class="bx bi">Active</span></div>
+      </div>
+      <div class="card">
+        <div class="ch"><span class="ct">Slots — North Dallas</span></div>
+        <div class="sg"><div class="sl on">Jun 14<br>9–11am</div><div class="sl on">Jun 14<br>1–3pm</div><div class="sl fl">Jun 18<br>9–11am</div><div class="sl">Jun 19<br>9–11am</div><div class="sl">Jun 21<br>1–3pm</div><div class="sl">Jun 25<br>9–11am</div></div>
+        <button class="bs">+ Add slot</button>
+      </div>
+    </div>
+    <div id="a-sec" class="hidden">
+      <div class="back-lite" onclick="aback()">‹ Back</div>
+      <div class="card">
+        <div class="tr"><div style="flex:1"><div class="tn">🔒 Role-based access control</div><div class="tm">Each role sees only their own data</div></div><span class="bx bd">On ✓</span></div>
+        <div class="tr"><div style="flex:1"><div class="tn">🛡 Two-factor authentication</div><div class="tm">Required for admin accounts</div></div><span class="bx bd">On ✓</span></div>
+        <div class="tr"><div style="flex:1"><div class="tn">🔐 Encrypted storage</div><div class="tm">All files encrypted at rest</div></div><span class="bx bd">On ✓</span></div>
+        <div class="tr"><div style="flex:1"><div class="tn">👁 Client data isolation</div><div class="tm">No cross-account visibility</div></div><span class="bx bd">On ✓</span></div>
+        <div class="tr"><div style="flex:1"><div class="tn">📋 Audit log</div><div class="tm">All approvals time-stamped</div></div><span class="bx bd">On ✓</span></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+</div>
+<script>
+var role='login';
+var creds={'client@havens.app:client123':'client','marcus@havens.app:handyman123':'handyman','admin@havens.app:admin123':'admin'};
+
+/* ═══ SUPABASE CONNECTION ═══ */
+var SUPABASE_URL='https://sstipdekzaywxxcdrjks.supabase.co';
+var SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzdGlwZGVremF5d3h4Y2RyamtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1Mzk5ODIsImV4cCI6MjA5OTExNTk4Mn0.oHvFAjE1TNQl171cAsT7D_t7kkTRIfjhZZsefy-wzxE';
+var sb=null,demoMode=false,currentUser=null;
+try{ if(window.supabase){ sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY); } }catch(e){ console.error('Supabase init failed',e); }
+
+var SVC_EMOJI={'Plumbing repair':'💧','Electrical — light fixtures':'💡','Door & window':'🚪','House cleaning':'🏠','Closet organizing':'🗂','Holiday decorating':'🎄'};
+var STATUS_BADGE={'pending':['bp','Pending'],'in_progress':['bi','In progress'],'done':['bd','Done ✓']};
+
+function enterPortal(r){
+  role=r;
+  cHist=['home'];hHist=[['h-dash',0]];aHist=[['a-dash',0]];
+  cgo('home',true);
+  document.getElementById('sc-login').style.display='none';
+  ['client','handyman','admin'].forEach(function(s){
+    var el=document.getElementById('sc-'+s);
+    el.style.display=(s===r)?'flex':'none';
+    el.classList.toggle('hidden',s!==r);
+  });
+}
+
+async function doLogin(){
+  var e=document.getElementById('le').value.trim().toLowerCase();
+  var p=document.getElementById('lp').value;
+  var err=document.getElementById('lerr');
+  err.classList.add('hidden');
+
+  /* Demo accounts — sample data, no database */
+  var demo=creds[e+':'+p];
+  if(demo){ demoMode=true; currentUser=null; enterPortal(demo); return; }
+
+  /* Real Supabase sign-in */
+  if(!sb){ err.textContent='Cannot reach Haven servers. Check your connection and try again.'; err.classList.remove('hidden'); return; }
+  try{
+    var res=await sb.auth.signInWithPassword({email:e,password:p});
+    if(res.error){ err.textContent='Incorrect email or password. Try again.'; err.classList.remove('hidden'); return; }
+    currentUser=res.data.user; demoMode=false;
+    /* Look up role from profile */
+    var prof=await sb.from('profiles').select('role,full_name').eq('id',currentUser.id).single();
+    var r=(prof.data&&prof.data.role)||'client';
+    if(prof.data&&prof.data.full_name){
+      var g=document.querySelector('#c-home .band-title');
+      if(g)g.textContent='Good morning, '+prof.data.full_name.split(' ')[0];
+    }
+    enterPortal(r);
+    if(r==='client')loadTasks();
+  }catch(ex){
+    err.textContent='Sign-in problem: '+(ex.message||'unknown error'); err.classList.remove('hidden');
+  }
+}
+
+async function loadTasks(){
+  if(demoMode||!sb||!currentUser)return;
+  var list=document.getElementById('tasks-list');
+  list.innerHTML='<div style="padding:14px 0;color:var(--sub);font-size:13px">Loading your list…</div>';
+  var res=await sb.from('tasks').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
+  if(res.error){ list.innerHTML='<div style="padding:14px 0;color:var(--red);font-size:13px">Couldn\'t load tasks: '+res.error.message+'</div>'; return; }
+  if(!res.data.length){ list.innerHTML='<div style="padding:14px 0;color:var(--sub);font-size:13px">Your honey-do list is empty. Tap + Add to create your first task.</div>'; return; }
+  list.innerHTML=res.data.map(function(t){
+    var em=SVC_EMOJI[t.service]||'🔧';
+    var sbdg=STATUS_BADGE[t.status]||STATUS_BADGE['pending'];
+    var d=new Date(t.created_at);
+    var dt=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    var nm=(t.service||'Task')+(t.description?(' — '+t.description):'');
+    if(nm.length>60)nm=nm.slice(0,57)+'…';
+    return '<div class="tr"><div class="ti">'+em+'</div><div style="flex:1"><div class="tn">'+esc(nm)+'</div><div class="tm">'+dt+' · '+esc(t.priority||'Medium')+'</div></div><span class="bx '+sbdg[0]+'">'+sbdg[1]+'</span></div>';
+  }).join('');
+}
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+
+async function saveTask(){
+  var svc=document.getElementById('svc-name').textContent||'General';
+  var desc=document.getElementById('task-desc').value.trim();
+  var pri=document.getElementById('task-priority').value;
+  var terr=document.getElementById('task-err');
+  var btn=document.getElementById('save-task-btn');
+  terr.classList.add('hidden');
+  if(demoMode||!sb||!currentUser){
+    /* Demo mode — just simulate */
+    btn.textContent='Saved ✓ (demo)';setTimeout(function(){btn.textContent='Save task';cgo('home');},900);return;
+  }
+  if(!desc){ terr.textContent='Please add a short description of the task.'; terr.classList.remove('hidden'); return; }
+  btn.textContent='Saving…';btn.disabled=true;
+  var res=await sb.from('tasks').insert({user_id:currentUser.id,service:svc,description:desc,priority:pri,status:'pending'});
+  btn.disabled=false;
+  if(res.error){ btn.textContent='Save task'; terr.textContent='Couldn\'t save: '+res.error.message; terr.classList.remove('hidden'); return; }
+  btn.textContent='Saved ✓';
+  document.getElementById('task-desc').value='';
+  setTimeout(function(){btn.textContent='Save task';cgo('home');loadTasks();},700);
+}
+
+function logout(){
+  if(sb&&!demoMode){ try{sb.auth.signOut();}catch(e){} }
+  role='login';demoMode=false;currentUser=null;
+  ['client','handyman','admin'].forEach(function(s){
+    var el=document.getElementById('sc-'+s);
+    el.style.display='none';
+    el.classList.add('hidden');
+  });
+  document.getElementById('sc-login').style.display='flex';
+  document.getElementById('le').value='';
+  document.getElementById('lp').value='';
+}
+var idata={
+  faucet:{s:['Turn off supply valves under the sink','Open faucet to release remaining pressure','Remove handle — unscrew set screw under decorative cap','Remove packing nut and pull out the stem','Replace washer and O-ring at stem base','Reassemble in reverse, restore water, test for drips'],v:'Fixing a leaking faucet — Haven guide'},
+  light:{s:['Turn off the circuit breaker for the room','Use a voltage tester to confirm power is off','Remove old fixture and disconnect wires (note colors)','Match wires: black–black, white–white, ground–ground','Secure new fixture to mounting bracket','Restore power and test'],v:'Replacing a light fixture — Haven guide'},
+  door:{s:['Mark where door sticks using chalk or carbon paper','Tighten all hinge screws — loose hinges cause most sticking','Replace stripped screws with longer ones or wood filler','Plane or sand lightly on marked sticking areas','Seal planed wood with primer to prevent re-swelling','Test swing and repeat if needed'],v:'Fixing a sticking door — Haven guide'},
+  caulk:{s:['Remove old caulk with a caulk remover tool or knife','Clean surface with isopropyl alcohol — let dry fully',"Apply painter's tape along both sides of the joint","Cut caulk nozzle at 45° and apply a steady bead","Smooth with a wet finger or caulk tool within 5 min","Remove tape carefully; cure 24 hrs before water exposure"],v:'Professional caulking technique — Haven guide'}
+};
+/* Client navigation — bottom nav + inner pages */
+var cPanels=['c-home','c-add','c-schedule','c-help','c-urgent','c-reports','c-myhome','c-howitworks','c-dreams','c-community','c-referral','c-billing','c-more'];
+var navMap={'home':'t-home','community':'t-community','dreams':'t-dreams','more':'t-more',
+  'add':'t-home','schedule':'t-home','reports':'t-home','help':'t-home','urgent':'t-home','myhome':'t-home','billing':'t-home','referral':'t-home','howitworks':'t-more'};
+var cHist=['home'];
+function cgo(name,isBack){
+  if(!isBack && cHist[cHist.length-1]!==name){cHist.push(name);if(cHist.length>25)cHist.shift();}
+  cPanels.forEach(function(t){var el=document.getElementById(t);if(el)el.classList.toggle('hidden',t!=='c-'+name);});
+  var activeTab=navMap[name]||'t-home';
+  document.querySelectorAll('.nav-tab').forEach(function(t){t.classList.toggle('on',t.id===activeTab);});
+  var cb=document.getElementById('c-back');
+  if(cb)cb.style.display=(name==='home')?'none':'flex';
+  var sa=document.getElementById('c-scroll');
+  if(sa)sa.scrollTo(0,0);
+}
+function cback(){
+  if(cHist.length>1){cHist.pop();cgo(cHist[cHist.length-1],true);}
+  else{cgo('home',true);}
+}
+/* Handyman tabs */
+var hPanels=['h-dash','h-clients','h-log','h-inst'];
+var hHist=[['h-dash',0]];
+function hst(tab,idx,isBack){
+  if(!isBack && hHist[hHist.length-1][0]!==tab){hHist.push([tab,idx]);if(hHist.length>25)hHist.shift();}
+  hPanels.forEach(function(t){document.getElementById(t).classList.toggle('hidden',t!==tab);});
+  document.querySelectorAll('#h-tabs .at').forEach(function(t,i){t.classList.toggle('on',i===idx);});
+  var hb=document.getElementById('h-back');
+  if(hb)hb.style.display=(tab==='h-dash')?'none':'flex';
+  var sa=document.querySelector('#sc-handyman .scroll-area');
+  if(sa)sa.scrollTo(0,0);
+}
+function hback(){
+  if(hHist.length>1){hHist.pop();var p=hHist[hHist.length-1];hst(p[0],p[1],true);}
+  else{hst('h-dash',0,true);}
+}
+/* Admin tabs */
+var aPanels=['a-dash','a-approvals','a-svc','a-help','a-sched','a-sec'];
+var aHist=[['a-dash',0]];
+function ast(tab,idx,isBack){
+  if(!isBack && aHist[aHist.length-1][0]!==tab){aHist.push([tab,idx]);if(aHist.length>25)aHist.shift();}
+  aPanels.forEach(function(t){document.getElementById(t).classList.toggle('hidden',t!==tab);});
+  document.querySelectorAll('#a-tabs .at').forEach(function(t,i){t.classList.toggle('on',i===idx);});
+  var ab=document.getElementById('a-back');
+  if(ab)ab.style.display=(tab==='a-dash')?'none':'flex';
+  var sa=document.querySelector('#sc-admin .scroll-area');
+  if(sa)sa.scrollTo(0,0);
+}
+function aback(){
+  if(aHist.length>1){aHist.pop();var p=aHist[aHist.length-1];ast(p[0],p[1],true);}
+  else{ast('a-dash',0,true);}
+}
+function pickSvc(name){
+  document.getElementById('svc-name').textContent=name;
+  document.getElementById('svc-form').classList.remove('hidden');
+}
+function tmic(bid,rid){
+  var b=document.getElementById(bid),r=document.getElementById(rid);
+  if(b.classList.contains('on')){b.classList.remove('on');b.textContent='🎤';return;}
+  b.classList.add('on');b.textContent='⏹';
+  setTimeout(function(){
+    b.classList.remove('on');b.textContent='🎤';r.classList.remove('hidden');
+    if(rid==='cdr'){
+      var td=document.getElementById('task-desc');
+      if(td&&!td.value)td.value='Faucet in kitchen dripping from hot water handle for about a week — constant drip, not just when in use.';
+      var chip=document.getElementById('cdr-chip');
+      if(chip)chip.classList.remove('hidden');
+    }
+  },2200);
+}
+function showInst(){
+  var v=document.getElementById('isel').value;
+  var c=document.getElementById('icontent');
+  if(!v){c.classList.add('hidden');return;}
+  var d=idata[v];
+  document.getElementById('isteps').innerHTML=d.s.map(function(s,i){return'<div style="margin-bottom:9px;display:flex;gap:9px;align-items:flex-start"><div style="width:24px;height:24px;border-radius:50%;background:#135182;color:#C3A684;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-family:\'Playfair Display\',serif">'+(i+1)+'</div><div>'+s+'</div></div>';}).join('');
+  document.getElementById('ivlabel').textContent=d.v;
+  c.classList.remove('hidden');
+}
+function toggleDreamForm(){
+  var f=document.getElementById('dream-form');
+  f.classList.toggle('hidden');
+  if(!f.classList.contains('hidden')){f.scrollIntoView({behavior:'smooth',block:'start'});}
+}
+function selBudget(el){
+  el.closest('.card').querySelectorAll('.budget-chip').forEach(function(c){c.classList.remove('on');});
+  el.classList.add('on');
+}
+document.getElementById('lp').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+</script>
+
+<script>
+/* Customer-facing demo: no login, client view only */
+demoMode=true;currentUser=null;
+enterPortal('client');
+</script>
+</body>
+</html>
