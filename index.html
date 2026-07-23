@@ -185,7 +185,7 @@
       overflow: hidden;
       transition: max-height 0.35s ease;
     }
-    .tile.open .tile-body { max-height: 400px; }
+    .tile.open .tile-body { max-height: 560px; }
 
     .tile-body-inner {
       padding: 2px 20px 20px 76px;
@@ -340,6 +340,7 @@
     .tile-copy strong { color: var(--text); font-weight: 600; }
     .tile-go {
       display: block;
+      text-decoration: none;
       margin-top: 16px;
       background: var(--gold);
       color: var(--navy);
@@ -372,62 +373,76 @@
     <p class="section-sub">Or someone you love? Try the demo below that fits your needs.</p>
 
         <div class="tiles">
-      <a class="tile t1 tile-link" href="https://enjoyyourhaven.github.io/haven-demo/demo-safety.html">
-        <div class="tile-head">
+      <div class="tile t1">
+        <button class="tile-head" onclick="toggle(this)">
           <div class="tile-icon">🛡️</div>
           <div class="tile-label">
             <h3>Handling your home on your own? You don&#39;t have to.</h3>
             <span>Safety and trust come first.</span>
           </div>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="tile-body">
+          <div class="tile-body-inner">Finally, a team you can trust for your home. Haven is a <strong>woman-owned and safety-led</strong> company. You should never have to wonder who is in your home. The same vetted, background-checked technician every visit — someone you know by name. Honest work at honest prices with <strong>no pressure and no being taken advantage of. Ever.</strong></div>
+          <a class="tile-go" href="https://enjoyyourhaven.github.io/haven-demo/demo-safety.html">Try your demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></a>
         </div>
-        <div class="tile-copy">Finally, a team you can trust for your home. Haven is a <strong>woman-owned and safety-led</strong> company. You should never have to wonder who is in your home. The same vetted, background-checked technician every visit — someone you know by name. Honest work at honest prices with <strong>no pressure and no being taken advantage of. Ever.</strong></div>
-        <div class="tile-go">Try your demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></div>
-      </a>
-      <a class="tile t2 tile-link" href="https://enjoyyourhaven.github.io/haven-demo/demo.html">
-        <div class="tile-head">
+      </div>
+      <div class="tile t2">
+        <button class="tile-head" onclick="toggle(this)">
           <div class="tile-icon">🔑</div>
           <div class="tile-label">
             <h3>First home? Congratulations!</h3>
             <span>A trusted guide for every homeowner.</span>
           </div>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="tile-body">
+          <div class="tile-body-inner">You don't receive an owner's manual at closing. Think of us as your new home's manual brought to life. Your technician will guide you through the care needed for your home — offering <strong>transparent recommendations</strong>, advising you on what needs to be addressed promptly, and on what can wait. Every visit documented so that <strong>your home's story is recorded from day one</strong>.</div>
+          <a class="tile-go" href="https://enjoyyourhaven.github.io/haven-demo/demo.html">Try the demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></a>
         </div>
-        <div class="tile-copy">You don't receive an owner's manual at closing. Think of us as your new home's manual brought to life. Your technician will guide you through the care needed for your home — offering <strong>transparent recommendations</strong>, advising you on what needs to be addressed promptly, and on what can wait. Every visit documented so that <strong>your home's story is recorded from day one</strong>.</div>
-        <div class="tile-go">Try the demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></div>
-      </a>
-      <a class="tile t3 tile-link" href="https://enjoyyourhaven.github.io/haven-demo/demo-family.html">
-        <div class="tile-head">
+      </div>
+      <div class="tile t3">
+        <button class="tile-head" onclick="toggle(this)">
           <div class="tile-icon">🎈</div>
           <div class="tile-label">
             <h3>Family focused?</h3>
             <span>Get your weekends back.</span>
           </div>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="tile-body">
+          <div class="tile-body-inner">Your honey-do list shouldn't compete with your family for your weekend. We will keep your home <strong>safe, maintained, and ready for life's moments</strong> — giving you more time for what matters most.</div>
+          <a class="tile-go" href="https://enjoyyourhaven.github.io/haven-demo/demo-family.html">Try your demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></a>
         </div>
-        <div class="tile-copy">Your honey-do list shouldn't compete with your family for your weekend. We will keep your home <strong>safe, maintained, and ready for life's moments</strong> — giving you more time for what matters most.</div>
-        <div class="tile-go">Try your demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></div>
-      </a>
-      <a class="tile t4 tile-link" href="https://enjoyyourhaven.github.io/haven-demo/demo-senior.html">
-        <div class="tile-head">
+      </div>
+      <div class="tile t4">
+        <button class="tile-head" onclick="toggle(this)">
           <div class="tile-icon">🌷</div>
           <div class="tile-label">
             <h3>Staying in the home you love?</h3>
             <span>Care with dignity.</span>
           </div>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="tile-body">
+          <div class="tile-body-inner">Your home holds a lifetime of memories. We are here to help you stay in it safely and confidently. A <strong>familiar, trusted team</strong> handles the ladders, the filters, and the little fixes — while keeping an eye on things so you don't have to. <strong>Independence for you. Peace of mind for your family.</strong></div>
+          <a class="tile-go" href="https://enjoyyourhaven.github.io/haven-demo/demo-senior.html">Try your demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></a>
         </div>
-        <div class="tile-copy">Your home holds a lifetime of memories. We are here to help you stay in it safely and confidently. A <strong>familiar, trusted team</strong> handles the ladders, the filters, and the little fixes — while keeping an eye on things so you don't have to. <strong>Independence for you. Peace of mind for your family.</strong></div>
-        <div class="tile-go">Try your demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></div>
-      </a>
-      <a class="tile t5 tile-link" href="https://enjoyyourhaven.github.io/haven-demo/demo.html">
-        <div class="tile-head">
+      </div>
+      <div class="tile t5">
+        <button class="tile-head" onclick="toggle(this)">
           <div class="tile-icon">🎁</div>
           <div class="tile-label">
             <h3>Have a new build and Haven came with it?</h3>
             <span>Your builder chose well!</span>
           </div>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="tile-body">
+          <div class="tile-body-inner">If your builder gifted you a Haven subscription, congratulations! You now have someone to <strong>manage your first-year warranty</strong>, help you learn your home, and keep maintenance documented from day one. A trusted partner for your new home — now and for years to come.</div>
+          <a class="tile-go" href="https://enjoyyourhaven.github.io/haven-demo/demo.html">Try the demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></a>
         </div>
-        <div class="tile-copy">If your builder gifted you a Haven subscription, congratulations! You now have someone to <strong>manage your first-year warranty</strong>, help you learn your home, and keep maintenance documented from day one. A trusted partner for your new home — now and for years to come.</div>
-        <div class="tile-go">Try the demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></div>
-      </a>
-
+      </div>
     </div>
 
     <div class="contact">
@@ -453,5 +468,13 @@
   </div>
 
   
+<script>
+    function toggle(btn) {
+      const tile = btn.closest('.tile');
+      const wasOpen = tile.classList.contains('open');
+      document.querySelectorAll('.tile.open').forEach(t => t.classList.remove('open'));
+      if (!wasOpen) tile.classList.add('open');
+    }
+  </script>
 </body>
 </html>
