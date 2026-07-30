@@ -16,14 +16,14 @@
   --blue-deep:#0E3D63;     /* darker shade */
   --blue-tint:#EAF1F8;     /* pale blue wash */
   --gold:#C3A684;          /* brand champagne gold */
-  --gold-deep:#9A7B4F;     /* readable gold on light */
+  --gold-deep:#755A28;     /* readable gold on light */
   --gold-tint:#F4EDE2;     /* pale gold wash */
   --bg:#F8F6F2;            /* warm paper */
   --white:#FFFFFF;
   --border:#E7E0D4;
   --text:#22303E;
-  --sub:#75808C;
-  --faint:#A5ADB6;
+  --sub:#5C6874;
+  --faint:#667180;
   --red:#B23A32;--red-bg:#FBEDEB;
   --green:#2E7D5B;--green-bg:#E7F3EC;
   --amber:#8A6D1F;--amber-bg:#F7EFD9;
@@ -53,7 +53,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:1
 .band::after{content:'';position:absolute;right:52px;bottom:-78px;width:104px;height:104px;border-radius:50%;background:rgba(195,166,132,.07)}
 .band .eyebrow{color:var(--gold);margin-bottom:5px}
 .band-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:500;color:#fff;margin-bottom:4px;position:relative;z-index:1}
-.band-sub{font-size:13px;color:rgba(255,255,255,.6);position:relative;z-index:1}
+.band-sub{font-size:13px;color:rgba(255,255,255,.92);position:relative;z-index:1}
 
 /* Cards */
 .card{background:var(--white);border:0.5px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px}
@@ -129,7 +129,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:1
 .hero-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px;position:relative;z-index:1}
 .hero-box{text-align:center;background:rgba(255,255,255,.1);border-radius:10px;padding:10px 4px}
 .hero-num{font-family:'Playfair Display',serif;font-size:16px;font-weight:500;color:var(--gold)}
-.hero-lbl{font-size:10px;color:rgba(255,255,255,.6);margin-top:2px}
+.hero-lbl{font-size:10px;color:rgba(255,255,255,.92);margin-top:2px}
 .pg3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .ph{border-radius:10px;overflow:hidden;background:#F3EFE8;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border:1.5px dashed var(--border);font-size:24px;cursor:pointer;min-height:90px}
 .ph.filled{border:none}
@@ -212,7 +212,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:1
 /* Staff tabs (handyman + admin) */
 .atabs{flex-shrink:0;display:flex;background:var(--blue);overflow-x:auto;-webkit-overflow-scrolling:touch;padding:0 4px}
 .atabs::-webkit-scrollbar{display:none}
-.at{padding:12px 14px;font-size:13px;color:rgba(255,255,255,.55);border-bottom:2px solid transparent;white-space:nowrap;cursor:pointer;user-select:none;flex-shrink:0;min-height:44px;display:flex;align-items:center;font-family:'Inter',sans-serif}
+.at{padding:12px 14px;font-size:13px;color:rgba(255,255,255,.85);border-bottom:2px solid transparent;white-space:nowrap;cursor:pointer;user-select:none;flex-shrink:0;min-height:44px;display:flex;align-items:center;font-family:'Inter',sans-serif}
 .at.on{color:#fff;border-bottom-color:var(--gold);font-weight:600}
 
 /* Back bar */
@@ -225,7 +225,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:1
 .login-hero::after{content:'';position:absolute;right:-50px;bottom:-70px;width:220px;height:220px;border-radius:50%;background:rgba(195,166,132,.08)}
 .login-title{font-family:'Playfair Display',serif;color:#fff;font-size:34px;font-weight:500;margin:14px 0 2px;position:relative;z-index:1}
 .login-brandline{color:var(--gold);font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:500;position:relative;z-index:1}
-.login-tag{color:rgba(255,255,255,.55);font-size:13px;margin-top:12px;font-style:italic;font-family:'Playfair Display',serif;position:relative;z-index:1}
+.login-tag{color:rgba(255,255,255,.85);font-size:13px;margin-top:12px;font-style:italic;font-family:'Playfair Display',serif;position:relative;z-index:1}
 .demo-box{background:var(--gold-tint);border:0.5px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--gold-deep);line-height:1.8}
 .err-box{font-size:13px;color:var(--red);padding:10px 12px;background:var(--red-bg);border-radius:10px;margin-bottom:10px}
 /* Back buttons */
@@ -233,6 +233,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:1
 .backbar{display:none!important}
 .band-back{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);border:1px solid rgba(195,166,132,.45);color:#fff;font-size:12px;font-weight:500;padding:7px 14px;border-radius:20px;cursor:pointer;margin-bottom:12px;position:relative;z-index:1;font-family:'Inter',sans-serif;min-height:34px}
 .back-lite{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--border);color:var(--text);font-size:12px;font-weight:500;padding:7px 14px;border-radius:20px;cursor:pointer;margin-bottom:12px;font-family:'Inter',sans-serif;min-height:34px}
+
+/* contrast fix: lighter gold for text on brand blue (WCAG AA) */
+.band .eyebrow,.logo-sub,.hero-num,.login-brandline,.ref-code,.bubble{color:#EBD5AE}
 </style>
 <style>/* Easy-reading client view */
 .tn{font-size:16.5px}.tm{font-size:14px}.pv-chip{font-size:14.5px}
@@ -737,12 +740,12 @@ button{min-height:44px}
       <div class="pg">
         <div class="referral-card">
           <div class="serif" style="font-size:18px;font-weight:500;color:#fff;margin-bottom:4px;position:relative;z-index:1">Give a month. Get a month.</div>
-          <div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:16px;line-height:1.5;position:relative;z-index:1">Share Haven with someone who deserves a home that takes care of itself.</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.92);margin-bottom:16px;line-height:1.5;position:relative;z-index:1">Share Haven with someone who deserves a home that takes care of itself.</div>
           <div class="ref-code-box">
             <div class="ref-code">DAVID-HAVEN</div>
             <button class="copy-btn" onclick="this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',2000)">Copy</button>
           </div>
-          <div style="font-size:12px;color:rgba(255,255,255,.45);text-align:center;line-height:1.5;position:relative;z-index:1">Your friend gets their first month free · You receive a month's credit when they subscribe</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.88);text-align:center;line-height:1.5;position:relative;z-index:1">Your friend gets their first month free · You receive a month's credit when they subscribe</div>
         </div>
         <div class="card">
           <div class="ch"><span class="ct">Your referrals</span></div>

@@ -20,8 +20,8 @@
       --blue-light: #E8F0FA;
       --blush: #F4EBE4;
       --text:   #1C2B42;
-      --sub:    #6B7A8D;
-      --taupe:  #9B8A7C;
+      --sub:    #5A6A7E;
+      --taupe:  #756150;
       --border: #E4D5C8;
     }
 
@@ -183,9 +183,10 @@
     .tile-body {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.35s ease;
+      visibility: hidden;
+      transition: max-height 0.35s ease, visibility 0.35s;
     }
-    .tile.open .tile-body { max-height: 560px; }
+    .tile.open .tile-body { max-height: 560px; visibility: visible; }
 
     .tile-body-inner {
       padding: 2px 20px 20px 76px;
@@ -345,7 +346,7 @@
       background: var(--gold);
       color: var(--navy);
       text-align: center;
-      font-size: 16px;
+      font-size: 19px;
       font-weight: 700;
       padding: 15px 20px;
     }
@@ -424,7 +425,7 @@
       display: block;
       width: 100%;
       font-family: 'Inter', sans-serif;
-      font-size: 16px;
+      font-size: 19px;
       font-weight: 700;
       text-align: center;
       border: none;
@@ -443,13 +444,13 @@
       color: var(--sage);
       box-shadow: none;
       font-weight: 600;
-      font-size: 14px;
+      font-size: 15px;
       padding: 12px 20px;
       margin-top: 4px;
     }
     .book-note {
       text-align: center;
-      font-size: 12.5px;
+      font-size: 13.5px;
       color: var(--taupe);
       margin-top: 12px;
       line-height: 1.5;
@@ -479,7 +480,7 @@
 
         <div class="tiles">
       <div class="tile t1">
-        <button class="tile-head" onclick="toggle(this)">
+        <button class="tile-head" onclick="toggle(this)" aria-expanded="false" aria-controls="tile-body-1">
           <div class="tile-icon">🛡️</div>
           <div class="tile-label">
             <h3>Handling your home on your own? You don&#39;t have to.</h3>
@@ -487,13 +488,13 @@
           </div>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
         </button>
-        <div class="tile-body">
+        <div class="tile-body" id="tile-body-1">
           <div class="tile-body-inner">Finally, a team you can trust for your home. Haven is a <strong>woman-owned and safety-led</strong> company. You should never have to wonder who is in your home. The same vetted, background-checked technician every visit — someone you know by name. Honest work at honest prices with <strong>no pressure and no being taken advantage of. Ever.</strong></div>
           <a class="tile-go" href="https://enjoyyourhaven.github.io/haven-demo/demo-safety.html">Try your demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></a>
         </div>
       </div>
       <div class="tile t2">
-        <button class="tile-head" onclick="toggle(this)">
+        <button class="tile-head" onclick="toggle(this)" aria-expanded="false" aria-controls="tile-body-2">
           <div class="tile-icon">🔑</div>
           <div class="tile-label">
             <h3>First home? Congratulations!</h3>
@@ -501,13 +502,13 @@
           </div>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
         </button>
-        <div class="tile-body">
+        <div class="tile-body" id="tile-body-2">
           <div class="tile-body-inner">You don't receive an owner's manual at closing. Think of us as your new home's manual brought to life. Your technician will guide you through the care needed for your home — offering <strong>transparent recommendations</strong>, advising you on what needs to be addressed promptly, and on what can wait. Every visit documented so that <strong>your home's story is recorded from day one</strong>.</div>
           <a class="tile-go" href="https://enjoyyourhaven.github.io/haven-demo/demo.html">Try your demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></a>
         </div>
       </div>
       <div class="tile t3">
-        <button class="tile-head" onclick="toggle(this)">
+        <button class="tile-head" onclick="toggle(this)" aria-expanded="false" aria-controls="tile-body-3">
           <div class="tile-icon">🎈</div>
           <div class="tile-label">
             <h3>Family focused?</h3>
@@ -515,13 +516,13 @@
           </div>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
         </button>
-        <div class="tile-body">
+        <div class="tile-body" id="tile-body-3">
           <div class="tile-body-inner">Your honey-do list shouldn't compete with your family for your weekend. We will keep your home <strong>safe, maintained, and ready for life's moments</strong> — giving you more time for what matters most.</div>
           <a class="tile-go" href="https://enjoyyourhaven.github.io/haven-demo/demo-family.html">Try your demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></a>
         </div>
       </div>
       <div class="tile t4">
-        <button class="tile-head" onclick="toggle(this)">
+        <button class="tile-head" onclick="toggle(this)" aria-expanded="false" aria-controls="tile-body-4">
           <div class="tile-icon">🌷</div>
           <div class="tile-label">
             <h3>Staying in the home you love?</h3>
@@ -529,13 +530,13 @@
           </div>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
         </button>
-        <div class="tile-body">
+        <div class="tile-body" id="tile-body-4">
           <div class="tile-body-inner">Your home holds a lifetime of memories. We are here to help you stay in it safely and confidently. A <strong>familiar, trusted team</strong> handles the ladders, the filters, and the little fixes — while keeping an eye on things so you don't have to. <strong>Independence for you. Peace of mind for your family.</strong></div>
           <a class="tile-go" href="https://enjoyyourhaven.github.io/haven-demo/demo-senior.html">Try your demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></a>
         </div>
       </div>
       <div class="tile t5">
-        <button class="tile-head" onclick="toggle(this)">
+        <button class="tile-head" onclick="toggle(this)" aria-expanded="false" aria-controls="tile-body-5">
           <div class="tile-icon">🎁</div>
           <div class="tile-label">
             <h3>Have a new build and Haven came with it?</h3>
@@ -543,7 +544,7 @@
           </div>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
         </button>
-        <div class="tile-body">
+        <div class="tile-body" id="tile-body-5">
           <div class="tile-body-inner">If your builder gifted you a Haven subscription, congratulations! You now have someone to <strong>manage your first-year warranty</strong>, help you learn your home, and keep maintenance documented from day one. A trusted partner for your new home — now and for years to come.</div>
           <a class="tile-go" href="https://enjoyyourhaven.github.io/haven-demo/demo-builder.html">Try your demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></a>
         </div>
@@ -607,8 +608,15 @@
     function toggle(btn) {
       const tile = btn.closest('.tile');
       const wasOpen = tile.classList.contains('open');
-      document.querySelectorAll('.tile.open').forEach(t => t.classList.remove('open'));
-      if (!wasOpen) tile.classList.add('open');
+      document.querySelectorAll('.tile.open').forEach(t => {
+        t.classList.remove('open');
+        const b = t.querySelector('.tile-head');
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+      if (!wasOpen) {
+        tile.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
     }
 
     function sendBooking(how) {
