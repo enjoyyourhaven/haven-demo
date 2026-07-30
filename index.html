@@ -356,6 +356,111 @@
       font-size: 12px;
       color: var(--taupe);
     }
+
+    /* ---------- Book a walkthrough ---------- */
+    .book {
+      background: #fff;
+      border-radius: 20px;
+      padding: 34px 28px 30px;
+      margin-bottom: 40px;
+      box-shadow: 0 6px 32px rgba(43,69,112,0.09), 0 1px 4px rgba(43,69,112,0.05);
+      position: relative;
+      scroll-margin-top: 24px;
+    }
+    .book::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      border-radius: 20px 20px 0 0;
+      background: linear-gradient(90deg, var(--gold) 0%, var(--sage) 60%, var(--navy) 100%);
+    }
+    .book h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--navy);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .book > p {
+      font-size: 14.5px;
+      color: var(--sub);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .book-field { margin-bottom: 14px; }
+    .book-field label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--navy);
+      letter-spacing: 0.03em;
+      margin-bottom: 6px;
+    }
+    .book-field input, .book-field select {
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      color: var(--text);
+      background: var(--cream);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 14px;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .book-field input:focus, .book-field select:focus {
+      outline: none;
+      border-color: var(--sage);
+      background: #fff;
+    }
+    .book-field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239B8A7C' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+    }
+    .book-send {
+      display: block;
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 15px 20px;
+      margin-top: 6px;
+      background: var(--gold);
+      color: var(--navy);
+      box-shadow: 0 4px 16px rgba(201,164,82,0.35);
+      transition: transform 0.15s ease;
+    }
+    .book-send:hover { transform: translateY(-2px); }
+    .book-send.alt {
+      background: none;
+      color: var(--sage);
+      box-shadow: none;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 12px 20px;
+      margin-top: 4px;
+    }
+    .book-note {
+      text-align: center;
+      font-size: 12.5px;
+      color: var(--taupe);
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+    .book-err {
+      display: none;
+      text-align: center;
+      font-size: 13px;
+      color: #A33B2E;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -398,7 +503,7 @@
         </button>
         <div class="tile-body">
           <div class="tile-body-inner">You don't receive an owner's manual at closing. Think of us as your new home's manual brought to life. Your technician will guide you through the care needed for your home — offering <strong>transparent recommendations</strong>, advising you on what needs to be addressed promptly, and on what can wait. Every visit documented so that <strong>your home's story is recorded from day one</strong>.</div>
-          <a class="tile-go" href="https://enjoyyourhaven.github.io/haven-demo/demo.html">Try the demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></a>
+          <a class="tile-go" href="https://enjoyyourhaven.github.io/haven-demo/demo.html">Try your demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></a>
         </div>
       </div>
       <div class="tile t3">
@@ -440,9 +545,39 @@
         </button>
         <div class="tile-body">
           <div class="tile-body-inner">If your builder gifted you a Haven subscription, congratulations! You now have someone to <strong>manage your first-year warranty</strong>, help you learn your home, and keep maintenance documented from day one. A trusted partner for your new home — now and for years to come.</div>
-          <a class="tile-go" href="https://enjoyyourhaven.github.io/haven-demo/demo.html">Try the demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></a>
+          <a class="tile-go" href="https://enjoyyourhaven.github.io/haven-demo/demo-builder.html">Try your demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:-2px"><path d="M9 6l6 6-6 6"/></svg></a>
         </div>
       </div>
+    </div>
+
+    <div class="book" id="book">
+      <h3>Book your free walkthrough</h3>
+      <p>We'll walk your home with you, listen to what you need, and build your honey&#8209;do list together. By appointment · about 30 minutes · no cost, no obligation.</p>
+      <div class="book-field">
+        <label for="bk-name">Your name</label>
+        <input type="text" id="bk-name" placeholder="First and last name" autocapitalize="words">
+      </div>
+      <div class="book-field">
+        <label for="bk-phone">Phone number</label>
+        <input type="tel" id="bk-phone" placeholder="(214) 555-0100">
+      </div>
+      <div class="book-field">
+        <label for="bk-area">City or neighborhood</label>
+        <input type="text" id="bk-area" placeholder="e.g. Plano, Lakewood, Frisco" autocapitalize="words">
+      </div>
+      <div class="book-field">
+        <label for="bk-time">Best time for your walkthrough</label>
+        <select id="bk-time">
+          <option>Weekday morning</option>
+          <option>Weekday afternoon</option>
+          <option>Weekend</option>
+          <option>Whatever is available soonest</option>
+        </select>
+      </div>
+      <button class="book-send" onclick="sendBooking('sms')">Text my request &#8250;</button>
+      <button class="book-send alt" onclick="sendBooking('email')">Or send it by email instead</button>
+      <div class="book-err" id="bk-err">Please add your name and phone number so we can reach you.</div>
+      <div class="book-note">This opens a message to Robin at Haven — nothing is sent until you hit send. We'll reply the same day to confirm your appointment.</div>
     </div>
 
     <div class="contact">
@@ -474,6 +609,30 @@
       const wasOpen = tile.classList.contains('open');
       document.querySelectorAll('.tile.open').forEach(t => t.classList.remove('open'));
       if (!wasOpen) tile.classList.add('open');
+    }
+
+    function sendBooking(how) {
+      const name  = document.getElementById('bk-name').value.trim();
+      const phone = document.getElementById('bk-phone').value.trim();
+      const area  = document.getElementById('bk-area').value.trim();
+      const time  = document.getElementById('bk-time').value;
+      const err   = document.getElementById('bk-err');
+      if (!name || !phone) { err.style.display = 'block'; return; }
+      err.style.display = 'none';
+      const msg = "Hi Robin! I'd like to book my free Haven walkthrough.\n"
+        + "Name: " + name + "\n"
+        + "Phone: " + phone + "\n"
+        + (area ? "Area: " + area + "\n" : "")
+        + "Best time: " + time;
+      const body = encodeURIComponent(msg);
+      if (how === 'sms') {
+        const ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
+        window.location.href = 'sms:+14699603220' + (ios ? '&' : '?') + 'body=' + body;
+      } else {
+        window.location.href = 'mailto:robin@enjoyyourhaven.com'
+          + '?subject=' + encodeURIComponent('Free walkthrough request — ' + name)
+          + '&body=' + body;
+      }
     }
   </script>
 </body>

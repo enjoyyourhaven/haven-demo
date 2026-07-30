@@ -10,11 +10,13 @@ Deployed via GitHub Pages from this repository (`enjoyyourhaven/haven-demo`):
 Any commit to `main` publishes within ~2 minutes.
 
 ## File map
-- `index.html` — the shareable front door: brand header, five persona cards (each card links directly into a persona demo, full message shown, gold "Try your demo" banner), then contact card with phone/website. This is the link Robin texts/emails and points QR codes at.
+- `index.html` — the shareable front door: brand header, five persona cards (each card links directly into a persona demo, full message shown, gold "Try your demo" banner), then a "Book your free walkthrough" form (`#book` — composes a prefilled text to Robin's phone or an email to robin@enjoyyourhaven.com; no backend), then contact card with phone/website. This is the link Robin texts/emails and points QR codes at.
 - `demo.html` — the standard app demo (client-only, no login, opens as "Good morning, Sarah"). Fully self-contained HTML with demo data; also contains Supabase auth groundwork (inactive in demo mode).
 - `demo-safety.html` — persona demo: Rachel Torres (independent woman; safety emphasis).
 - `demo-family.html` — persona demo: Jessica Alvarez (busy family; kid-related tasks).
-- `demo-senior.html` — persona demo: Eleanor Whitfield (senior; grab bars/threshold tasks, larger simple fonts for readability).
+- `demo-senior.html` — persona demo: Eleanor Whitfield (senior; grab bars/threshold tasks, larger simple fonts for readability, "Shared with family" card).
+- `demo-builder.html` — persona demo: David Chen (new-build homeowner in Prosper whose builder gifted year one; warranty-item honey-do list, builder-covered billing). Linked from the fifth "Is this you?" tile.
+- All five demos end the home screen with a "This could be your home" card linking to `index.html#book`.
 - `safety-first.html` — landing page: The Single Woman (capability/safety messaging — her home, on her terms; CTA "Book Your Visit").
 - `first-year.html` — landing page: First-Time Home Buyer (CTA "Book Your First-Year Walkthrough").
 - `busy-families.html` — landing page: Young Busy Family (CTA "Book Your Visit · Recurring Plans").
