@@ -91,9 +91,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:1
 /* Forms */
 .ig{margin-bottom:12px}
 .ig label{font-size:13px;color:var(--sub);display:block;margin-bottom:5px;font-weight:500}
-.ig input,.ig textarea,.ig select{width:100%;font-size:15px;border:1px solid var(--border);border-radius:10px;padding:12px 13px;background:#fff;color:var(--text);outline:none;-webkit-appearance:none;min-height:48px;font-family:'Inter',sans-serif}
+.ig input,.ig textarea,.ig select{width:100%;font-size:16px;border:1px solid var(--border);border-radius:10px;padding:12px 13px;background:#fff;color:var(--text);outline:none;-webkit-appearance:none;min-height:48px;font-family:'Inter',sans-serif}
 .ig input:focus,.ig textarea:focus,.ig select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(195,166,132,.18)}
 .ig textarea{height:80px;resize:none;min-height:80px}
+#isel{font-size:16px}
 
 /* Mic */
 .mb{width:52px;height:52px;border-radius:50%;background:var(--blue);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px}
@@ -1228,13 +1229,68 @@ enterPortal('client');
 /* Size the app to the truly visible screen area (handles Safari/Chrome toolbars) */
 (function(){
   function setH(){
-    var h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+    var vv = window.visualViewport;
+    var h = (vv && vv.height) || window.innerHeight || 0;
+    var layout = window.innerHeight || h;
+    /* Keyboard / short-viewport guard: the topbar + bottom nav are ~130px of
+       unshrinkable chrome, so without a floor the scroll area collapses to 0px
+       and the panel becomes unreachable (landscape + keyboard on iPhone). */
+    if (h < 380) h = Math.max(layout, 380);
     document.documentElement.style.setProperty('--app-h', h + 'px');
   }
   setH();
   window.addEventListener('resize', setH);
   window.addEventListener('orientationchange', setH);
   if (window.visualViewport) window.visualViewport.addEventListener('resize', setH);
+})();
+</script>
+<script>
+/* Keep the demo's dates current: the visit is always 3 days out, and every
+   other date shifts with it, so the demo never shows a stale calendar. */
+(function(){
+  try{
+    var MS=86400000, V=new Date(); V.setHours(0,0,0,0); V.setDate(V.getDate()+3);
+    var M3=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var MF=['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    function at(off){ return new Date(V.getTime()+off*MS); }
+    function ab(off){ var x=at(off); return M3[x.getMonth()]+' '+x.getDate(); }
+    function fu(off){ var x=at(off); return MF[x.getMonth()]+' '+x.getDate(); }
+    function fy(off){ var x=at(off); return MF[x.getMonth()]+' '+x.getDate()+', '+x.getFullYear(); }
+    var inv=new Date(V.getFullYear(),V.getMonth()+1,1);
+    var map={
+      'Thursday, June 14': WD[V.getDay()]+', '+MF[V.getMonth()]+' '+V.getDate(),
+      'April 12, 2026': fy(-63),
+      'May 10, 2026': fy(-35),
+      'Jul 1, 2026': M3[inv.getMonth()]+' '+inv.getDate()+', '+inv.getFullYear(),
+      'June 14': fu(0),
+      'Jun 14': ab(0),  'Jun 18': ab(4),   'Jun 19': ab(5),   'Jun 21': ab(7),
+      'Jun 25': ab(11), 'Jun 12': ab(-2),  'May 28': ab(-17), 'May 20': ab(-25),
+      'May 15': ab(-30),'Apr 15': ab(-60), 'Jun 1': ab(-13),  'May 1': ab(-44)
+    };
+    var keys=Object.keys(map).sort(function(a,b){return b.length-a.length;});
+    var rx=new RegExp(keys.map(function(k){return k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}).join('|'),'g');
+    var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null,false),n,hits=[];
+    while((n=w.nextNode())){
+      var p=n.parentNode&&n.parentNode.nodeName;
+      if(p==='SCRIPT'||p==='STYLE')continue;
+      rx.lastIndex=0;
+      if(rx.test(n.nodeValue))hits.push(n);
+    }
+    for(var i=0;i<hits.length;i++){
+      rx.lastIndex=0;
+      hits[i].nodeValue=hits[i].nodeValue.replace(rx,function(m){return map[m];});
+    }
+    /* calendar badge: <span>14</span><span>JUN</span> */
+    var sp=document.getElementsByTagName('span');
+    for(var j=0;j<sp.length;j++){
+      if(sp[j].textContent.trim()==='JUN'){
+        sp[j].textContent=M3[V.getMonth()].toUpperCase();
+        var pv=sp[j].previousElementSibling;
+        if(pv)pv.textContent=V.getDate();
+      }
+    }
+  }catch(e){ /* leave the printed dates as-is */ }
 })();
 </script>
 </body>
